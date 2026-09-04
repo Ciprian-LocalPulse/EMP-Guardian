@@ -1,0 +1,17 @@
+Toate fișierele din directorul `hardware/` (scheme electrice, fișiere PCB,
+liste de componente, modele de carcasă) sunt licențiate sub:
+
+CERN Open Hardware Licence Version 2 - Strongly Reciprocal (CERN-OHL-S v2)
+
+Copyright (c) 2026 Ciprian Ștefan Pleșca
+
+Textul integral al licenței este disponibil la:
+https://ohwr.org/cern_ohl_s_v2.txt
+
+Rezumat neoficial:
+- Poți folosi, studia, modifica și fabrica hardware pe baza acestor
+  fișiere, inclusiv comercial.
+- Orice variantă modificată și distribuită trebuie să rămână sub aceeași
+  licență (reciprocitate puternică) și trebuie să indice modificările
+  făcute și sursa originală.
+- Fișierele sunt furnizate fără nicio garanție.

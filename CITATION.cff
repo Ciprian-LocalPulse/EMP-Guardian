@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Dacă folosești acest software sau hardware în cercetare, te rog citează-l astfel:"
+title: "EMP-Guardian: Sistem embedded open-source pentru detecția și atenuarea efectelor pulsului electromagnetic"
+authors:
+  - family-names: "Pleșca"
+    given-names: "Ciprian Ștefan"
+date-released: 2026-09-04
+license: MIT
+repository-code: "https://github.com/<username>/EMP-Guardian"
+keywords:
+  - EMP
+  - electromagnetic-pulse
+  - shielding
+  - embedded-systems
+  - critical-infrastructure
+  - open-hardware

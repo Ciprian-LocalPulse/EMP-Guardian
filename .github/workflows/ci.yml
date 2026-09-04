@@ -1,0 +1,38 @@
+# EMP-Guardian - CI
+# Autor: Ciprian Ștefan Pleșca
+
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  firmware-tests:
+    name: Teste unitare firmware
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Instalează gcc
+        run: sudo apt-get update && sudo apt-get install -y gcc
+      - name: Rulează testele de detecție
+        run: |
+          cd firmware
+          make test
+
+  python-lint:
+    name: Lint aplicație de monitorizare
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Instalează dependențe
+        run: |
+          pip install -r software/monitor/requirements.txt
+          pip install flake8
+      - name: Rulează flake8
+        run: flake8 software/monitor/emp_monitor.py --max-line-length=110

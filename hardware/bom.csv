@@ -1,0 +1,12 @@
+Referință,Componentă,Valoare/Model,Cantitate,Notă
+U1,Microcontroler,STM32F411CEU6,1,ARM Cortex-M4 100MHz
+U2,Amplificator de instrumentație,AD8421,1,pentru semnalul de la senzor
+D1-D2,Diode de protecție,BAV99,2,limitare tensiune intrare ADC
+Q1,MOSFET comutație rapidă,IRF7389,1,actuator ecranare
+L1,Bobină Rogowski,custom,1,senzor - se dimensionează per proiect
+C1,Condensator filtrare,100pF,1,filtru anti-aliasing
+R1,Rezistor terminare,50 ohm,1,adaptare impedanță senzor
+R2,Rezistor sarcină,1k ohm,1,circuit de condiționare
+BT1,Supercondensator,5.5V/1F,1,alimentare de rezervă
+J1,Conector UART,pin header 3 pini,1,debug/telemetrie
+-,Plasă de cupru ecranare,-,per proiect,vezi docs/hardware_specs.md
