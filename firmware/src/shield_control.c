@@ -1,18 +1,18 @@
 /**
- * EMP-Guardian - Control actuator de ecranare
- * Autor: Ciprian Ștefan Pleșca
- * Licență: MIT
+ * EMP-Guardian - Shielding actuator control
+ * Author: Ciprian Ștefan Pleșca
+ * License: MIT
  *
- * Notă de portabilitate: acest fișier este scris generic, cu funcții HAL
- * (emp_hal_gpio_write, emp_hal_delay_ms) care trebuie implementate pentru
- * placa țintă. Un exemplu de implementare HAL pentru STM32 HAL Library
- * este inclus mai jos, comentat.
+ * Portability note: this file is written generically, with HAL functions
+ * (emp_hal_gpio_write, emp_hal_delay_ms) that must be implemented for the
+ * target board. An example HAL implementation for the STM32 HAL Library
+ * is included below, commented out.
  */
 
 #include "shield_control.h"
 #include "config.h"
 
-/* Strat HAL generic - implementează aceste funcții pentru placa ta */
+/* Generic HAL layer - implement these functions for your board */
 extern void emp_hal_gpio_write(int pin, bool level);
 extern void emp_hal_delay_ms(uint32_t ms);
 
@@ -40,8 +40,8 @@ void shield_control_wait_reset(void) {
     emp_hal_delay_ms(SHIELD_RESET_DELAY_MS);
     shield_control_deactivate();
 #else
-    /* Reset manual: rămâne în stare activă până la intervenția
-     * unui operator, prin comanda dedicată din stratul de comunicație. */
+    /* Manual reset: stays in active state until an operator intervenes,
+     * via the dedicated command in the communication layer. */
     (void)0;
 #endif
 }
@@ -51,8 +51,8 @@ shield_state_t shield_control_get_state(void) {
 }
 
 /* ------------------------------------------------------------------
- * Exemplu de implementare HAL pentru STM32 HAL Library (comentat).
- * Decomentează și adaptează pentru placa ta.
+ * Example HAL implementation for the STM32 HAL Library (commented out).
+ * Uncomment and adapt for your board.
  *
  * #include "stm32f4xx_hal.h"
  *

@@ -1,6 +1,6 @@
 # Security Policy
 
-**Maintainer:** Ciprian Ștefan Pleșca
+**Maintainer:** Ciprian Ștefan Pleșca — Independent Researcher, Romania
 
 ## Reporting a vulnerability
 
@@ -26,4 +26,4 @@ It does **not** cover general questions about EMP physics or protection design �
 
 ## Out of scope
 
-Reports related to the theoretical/design limitations already documented in `MANIFESTO.md` and `docs/threat_model.md` (e.g., "the detection thresholds aren't experimentally calibrated") are known limitations, not vulnerabilities — feel free to discuss those in a regular issue or pull request instead.
+Reports related to the theoretical/design limitations already documented in [`MANIFESTO.md`](MANIFESTO.md) and [`docs/threat_model.md`](docs/threat_model.md) (e.g., "the detection thresholds aren't experimentally calibrated") are known limitations, not vulnerabilities — feel free to discuss those in a regular issue or pull request instead.

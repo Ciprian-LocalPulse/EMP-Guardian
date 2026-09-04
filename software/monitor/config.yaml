@@ -1,15 +1,15 @@
-# EMP-Guardian - Configurare aplicație de monitorizare
-# Autor: Ciprian Ștefan Pleșca
+# EMP-Guardian - Monitoring application configuration
+# Author: Ciprian Ștefan Pleșca
 
 log_file: "emp_events.log"
 
-# Praguri și opțiuni de notificare (extensibil - implementează
-# funcțiile de notificare corespunzătoare în emp_monitor.py sau
-# software/api/ în funcție de nevoile instituției tale)
+# Thresholds and notification options (extensible - implement the
+# corresponding notification functions in emp_monitor.py or
+# software/api/ according to your institution's needs)
 notifications:
   enabled: false
-  # webhook_url: "https://exemplu.local/webhook"
-  # email_to: "operator@exemplu.local"
+  # webhook_url: "https://example.local/webhook"
+  # email_to: "operator@example.local"
 
-# Interval de reconectare automată la portul serial, în secunde
+# Automatic serial-port reconnection interval, in seconds
 reconnect_interval_s: 5

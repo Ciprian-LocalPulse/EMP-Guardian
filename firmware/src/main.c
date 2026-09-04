@@ -1,7 +1,7 @@
 /**
- * EMP-Guardian - Bucla principală firmware
- * Autor: Ciprian Ștefan Pleșca
- * Licență: MIT
+ * EMP-Guardian - Main firmware loop
+ * Author: Ciprian Ștefan Pleșca
+ * License: MIT
  */
 
 #include "emp_detector.h"
@@ -34,9 +34,9 @@ int main(void) {
             shield_control_wait_reset();
         }
 
-        /* Pauză scurtă pentru a nu satura bucla de eșantionare;
-         * într-o implementare reală, se recomandă declanșare pe
-         * întrerupere de timer în loc de buclă de tip busy-wait. */
+        /* Short pause to avoid saturating the sampling loop; in a real
+         * implementation, a timer-interrupt trigger is recommended
+         * instead of a busy-wait loop. */
         for (volatile int i = 0; i < 10000; i++) { }
     }
 }

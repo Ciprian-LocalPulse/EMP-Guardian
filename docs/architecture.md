@@ -1,57 +1,73 @@
-# Arhitectura EMP-Guardian
+# EMP-Guardian Architecture
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-## Prezentare generală
+## Overview
 
-EMP-Guardian este format din patru subsisteme care lucrează împreună:
+EMP-Guardian is composed of four subsystems working together:
 
-1. **Lanțul de detecție** (senzor + condiționare de semnal + ADC)
-2. **Unitatea de decizie** (firmware, algoritm de detecție)
-3. **Actuatorul de protecție** (ecranare/deconectare rapidă)
-4. **Stratul de raportare** (comunicație, jurnalizare, monitorizare la distanță)
+1. **Detection chain** (sensor + signal conditioning + ADC)
+2. **Decision unit** (firmware, detection algorithm)
+3. **Protection actuator** (fast shielding/disconnection)
+4. **Reporting layer** (communication, logging, remote monitoring)
 
-```
-┌─────────────┐     ┌──────────────┐     ┌────────────────┐     ┌───────────────┐
-│   Senzor    │────▶│ Condiționare │────▶│  Microcontroler │────▶│   Actuator    │
-│ (bandă largă│     │  semnal +    │     │  (detecție +    │     │  de ecranare  │
-│  / Rogowski)│     │     ADC      │     │    decizie)     │     │  (MOSFET/IGBT)│
-└─────────────┘     └──────────────┘     └────────┬────────┘     └───────────────┘
-                                                    │
-                                                    ▼
-                                          ┌───────────────────┐
-                                          │  Comunicație /     │
-                                          │  jurnalizare       │
-                                          │  (UART/Ethernet)   │
-                                          └────────┬───────────┘
-                                                    ▼
-                                          ┌───────────────────┐
-                                          │  Aplicație de      │
-                                          │  monitorizare      │
-                                          │  (software/monitor)│
-                                          └───────────────────┘
+```mermaid
+flowchart LR
+    Sensor["Sensor\n(broadband / Rogowski)"] --> Cond["Signal conditioning\n+ ADC"]
+    Cond --> MCU["Microcontroller\n(detection + decision)"]
+    MCU --> Act["Shielding actuator\n(MOSFET/IGBT)"]
+    MCU --> Comm["Communication /\nlogging (UART/Ethernet)"]
+    Comm --> Mon["Monitoring application\n(software/monitor)"]
+
+    style Sensor fill:#0b3d91,color:#fff
+    style Cond fill:#0b3d91,color:#fff
+    style MCU fill:#7a1f1f,color:#fff
+    style Act fill:#1f6e1f,color:#fff
+    style Comm fill:#4a4a4a,color:#fff
+    style Mon fill:#4a4a4a,color:#fff
 ```
 
-## Componente
+## Components
 
-- **Senzor EMP:** bobină Rogowski sau antenă de bandă largă, cu circuit de condiționare (amplificator + limitator de tensiune, esențial pentru a proteja intrarea ADC-ului).
-- **Microcontroler:** eșantionează semnalul, rulează algoritmul de detecție (prag adaptiv + fereastră temporală), ia decizia de activare.
-- **Actuator de ecranare:** comutatoare de mare viteză (MOSFET/IGBT sau relee cu stare solidă) care izolează electric echipamentul protejat sau îl conectează la o cale de descărcare controlată.
-- **Interfață de comunicație:** UART, SPI sau Ethernet, pentru raportare către aplicația de monitorizare.
-- **Alimentare de rezervă:** baterie sau supercondensator, astfel încât sistemul să rămână funcțional în timpul și imediat după eveniment.
+- **EMP sensor:** Rogowski coil or broadband antenna, with a conditioning circuit (amplifier + voltage limiter, essential to protect the ADC input).
+- **Microcontroller:** samples the signal, runs the detection algorithm (adaptive threshold + time window), and makes the activation decision.
+- **Shielding actuator:** high-speed switches (MOSFET/IGBT or solid-state relays) that electrically isolate the protected equipment or route it to a controlled discharge path.
+- **Communication interface:** UART, SPI, or Ethernet, for reporting to the monitoring application.
+- **Backup power:** battery or supercapacitor, so the system remains functional during and immediately after the event.
 
-## Flux de date
+## Data flow
 
-1. Senzorul produce un semnal analogic proporțional cu intensitatea câmpului electromagnetic detectat.
-2. Circuitul de condiționare limitează și filtrează semnalul înainte de ADC.
-3. ADC-ul eșantionează la o rată suficient de mare (minim 1 MSPS) pentru a surprinde fronturi rapide.
-4. Algoritmul din firmware validează evenimentul (elimină comutații normale, zgomot RF, ESD minore).
-5. Dacă evenimentul este confirmat, actuatorul este activat în mai puțin de 10 µs.
-6. Evenimentul este scris în memorie nevolatilă și transmis către stratul de raportare.
+```mermaid
+sequenceDiagram
+    participant S as Sensor
+    participant C as Conditioning circuit
+    participant ADC as ADC
+    participant F as Firmware algorithm
+    participant A as Shielding actuator
+    participant L as Non-volatile memory / reporting
 
-## Principii de proiectare
+    S->>C: Analog signal (proportional to field intensity)
+    C->>ADC: Limited and filtered signal
+    ADC->>F: Samples at >= 1 MSPS
+    F->>F: Validate event (reject switching noise, RF, minor ESD)
+    alt Event confirmed
+        F->>A: Activate (< 10 us)
+        F->>L: Write event + transmit to reporting layer
+    else Not confirmed
+        F->>F: Reset counter
+    end
+```
 
-- **Fail-safe:** dacă sistemul pierde alimentarea sau se defectează, ecranarea trebuie să rămână (sau să treacă) în starea protejată implicit.
-- **Latență minimă:** timpul total detecție-activare este parametrul critic; orice optimizare software/hardware trebuie evaluată prin acest criteriu.
-- **Testabilitate:** fiecare modul (detector, actuator, comunicație) trebuie să poată fi testat izolat, cu semnale simulate.
-- **Portabilitate:** codul de firmware este scris pentru a fi ușor de portat între familii de microcontrolere ARM Cortex-M.
+1. The sensor produces an analog signal proportional to the intensity of the detected electromagnetic field.
+2. The conditioning circuit limits and filters the signal before the ADC.
+3. The ADC samples at a sufficiently high rate (minimum 1 MSPS) to capture fast edges.
+4. The firmware algorithm validates the event (rejecting normal switching, RF noise, minor ESD).
+5. If the event is confirmed, the actuator is activated in under 10 µs.
+6. The event is written to non-volatile memory and transmitted to the reporting layer.
+
+## Design principles
+
+- **Fail-safe:** if the system loses power or malfunctions, the shielding must remain in (or transition to) the default protected state.
+- **Minimal latency:** total detection-to-activation time is the critical parameter; any software/hardware optimization must be evaluated against this criterion.
+- **Testability:** every module (detector, actuator, communication) must be testable in isolation, with simulated signals.
+- **Portability:** the firmware is written to be easily ported across ARM Cortex-M microcontroller families.

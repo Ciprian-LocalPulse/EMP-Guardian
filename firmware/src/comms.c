@@ -1,14 +1,14 @@
 /**
- * EMP-Guardian - Modul de comunicație (raportare evenimente)
- * Autor: Ciprian Ștefan Pleșca
- * Licență: MIT
+ * EMP-Guardian - Communication module (event reporting)
+ * Author: Ciprian Ștefan Pleșca
+ * License: MIT
  */
 
 #include "comms.h"
 #include "config.h"
 #include <stdio.h>
 
-/* Strat HAL generic pentru UART - implementează pentru placa ta */
+/* Generic UART HAL layer - implement for your board */
 extern void emp_hal_uart_init(uint32_t baudrate);
 extern void emp_hal_uart_write(const char *data, int len);
 

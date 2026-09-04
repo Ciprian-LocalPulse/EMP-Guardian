@@ -1,36 +1,36 @@
-# Model de amenințare
+# Threat Model
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-## Scop
+## Purpose
 
-Acest document definește ce tipuri de evenimente EMP-Guardian este proiectat să detecteze și să atenueze, și ce rămâne explicit în afara scopului proiectului.
+This document defines which types of EMP events EMP-Guardian is designed to detect and mitigate, and what is explicitly outside the project's scope.
 
-## În scopul proiectului (defensiv)
+## In scope (defensive)
 
-- **EMP de origine naturală:** furtuni geomagnetice severe (evenimente de tip Carrington), care induc curenți intenși în rețelele electrice lungi.
-- **Descărcări electrostatice industriale (ESD)** de intensitate ridicată în medii industriale.
-- **Interferențe electromagnetice accidentale** provenite de la echipamente de mare putere (radare, transmițători, utilaje industriale).
-- **Evenimente EMP de origine umană asupra cărora entitatea care operează sistemul nu are control** — sistemul reacționează defensiv, indiferent de cauză.
+- **Naturally occurring EMP:** severe geomagnetic storms (Carrington-type events), which induce intense currents in long power transmission networks.
+- **High-intensity industrial electrostatic discharges (ESD)** in industrial environments.
+- **Accidental electromagnetic interference** from high-power equipment (radar, transmitters, industrial machinery).
+- **Human-caused EMP events over which the operating entity has no control** — the system reacts defensively, regardless of cause.
 
-## Explicit în afara scopului
+## Explicitly out of scope
 
-- Proiectul **nu conține** și **nu va conține** scheme, cod sau instrucțiuni pentru generarea, amplificarea sau direcționarea unui puls electromagnetic.
-- Proiectul **nu este** un ghid de atac și nu trebuie folosit ca atare.
-- Orice pull request sau contribuție care introduce funcționalități ofensive va fi respinsă.
+- The project **does not contain** and **will never contain** schematics, code, or instructions for generating, amplifying, or directing an electromagnetic pulse.
+- The project **is not** an attack guide and must not be used as one.
+- Any pull request or contribution introducing offensive functionality will be rejected.
 
-## Actori și cazuri de utilizare vizate
+## Actors and target use cases
 
-| Actor | Caz de utilizare |
+| Actor | Use case |
 |---|---|
-| Operator de infrastructură critică (energie, apă, telecom) | Protejarea echipamentelor de control (SCADA/ICS) |
-| Instituție de cercetare / universitate | Platformă de studiu pentru duritate electromagnetică |
-| Entitate guvernamentală / militară | Protecția centrelor de comandă, comunicații, echipamente sensibile (conform standardelor proprii, ex. MIL-STD-188-125) |
-| Operator de centru de date | Linie suplimentară de apărare pentru echipamente critice |
-| Radioamatori / cercetători independenți | Experimentare, educație, contribuții open-source |
+| Critical infrastructure operator (power, water, telecom) | Protecting control equipment (SCADA/ICS) |
+| Research institution / university | Study platform for electromagnetic hardening |
+| Government / military entity | Protection of command centers, communications, sensitive equipment (per their own standards, e.g. MIL-STD-188-125) |
+| Data center operator | Additional line of defense for critical equipment |
+| Amateur radio operators / independent researchers | Experimentation, education, open-source contributions |
 
-## Limitări explicite
+## Explicit limitations
 
-- Sistemul oferă protecție **suplimentară**, nu garantată 100%, mai ales împotriva evenimentelor de intensitate extremă.
-- Eficiența reală depinde de calitatea implementării hardware (ecranare pasivă, calitatea senzorului, timpul de reacție validat experimental).
-- Documentul `docs/compliance.md` detaliază obligațiile legale asociate utilizării și distribuirii proiectului.
+- The system offers **additional** protection, not a 100% guarantee, especially against extreme-intensity events.
+- Real-world effectiveness depends on the quality of the hardware implementation (passive shielding, sensor quality, experimentally validated reaction time).
+- [`docs/compliance.md`](compliance.md) details the legal obligations associated with using and distributing this project.

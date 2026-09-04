@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-EMP-Guardian - Aplicație de monitorizare
-Autor: Ciprian Ștefan Pleșca
-Licență: MIT
+EMP-Guardian - Monitoring application
+Author: Ciprian Ștefan Pleșca
+License: MIT
 
-Citește evenimente de pe portul serial expus de firmware și le
-jurnalizează local. Poate fi extinsă ușor cu notificări (email, SMS,
-webhook) în funcție de mediul de operare.
+Reads events from the serial port exposed by the firmware and logs
+them locally. Can easily be extended with notifications (email, SMS,
+webhook) depending on the operating environment.
 """
 
 import argparse
@@ -29,7 +29,7 @@ log = logging.getLogger("emp_monitor")
 def load_config(path: str) -> dict:
     config_path = Path(path)
     if not config_path.exists():
-        log.warning("Fișierul de configurare %s nu există, se folosesc valori implicite.", path)
+        log.warning("Config file %s does not exist, using default values.", path)
         return {}
     with config_path.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f) or {}
@@ -62,10 +62,10 @@ def parse_line(line: str) -> dict:
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="EMP-Guardian Monitor")
-    parser.add_argument("--port", required=True, help="Port serial (ex: /dev/ttyUSB0 sau COM3)")
+    parser.add_argument("--port", required=True, help="Serial port (e.g. /dev/ttyUSB0 or COM3)")
     parser.add_argument("--baud", type=int, default=115200, help="Baud rate")
-    parser.add_argument("--config", default="config.yaml", help="Fișier de configurare")
-    parser.add_argument("--log-file", default="emp_events.log", help="Fișier de jurnalizare a evenimentelor")
+    parser.add_argument("--config", default="config.yaml", help="Configuration file")
+    parser.add_argument("--log-file", default="emp_events.log", help="Event log file")
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -73,12 +73,12 @@ def main() -> None:
 
     try:
         ser = serial.Serial(args.port, args.baud, timeout=1)
-        log.info("Conectat la %s (%d baud)", args.port, args.baud)
+        log.info("Connected to %s (%d baud)", args.port, args.baud)
     except serial.SerialException as e:
-        log.error("Eroare la deschiderea portului serial: %s", e)
+        log.error("Error opening serial port: %s", e)
         return
 
-    log.info("Monitorizare pornită. Ctrl+C pentru oprire.")
+    log.info("Monitoring started. Ctrl+C to stop.")
     try:
         while True:
             raw_line = ser.readline().decode("utf-8", errors="replace").strip()
@@ -89,15 +89,15 @@ def main() -> None:
             append_to_log(log_file, event)
 
             if event["type"] == "alert":
-                log.warning("ALERTĂ: %s", event.get("message", raw_line))
+                log.warning("ALERT: %s", event.get("message", raw_line))
             elif event["type"] == "status":
-                log.info("Stare: %s = %s", event.get("key"), event.get("value"))
+                log.info("Status: %s = %s", event.get("key"), event.get("value"))
             else:
-                log.debug("Mesaj neinterpretat: %s", raw_line)
+                log.debug("Unrecognized message: %s", raw_line)
 
             time.sleep(0.01)
     except KeyboardInterrupt:
-        log.info("Monitorizare oprită de utilizator.")
+        log.info("Monitoring stopped by user.")
     finally:
         ser.close()
 

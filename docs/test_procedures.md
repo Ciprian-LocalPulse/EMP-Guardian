@@ -1,45 +1,59 @@
-# Proceduri de testare
+# Test Procedures
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-## Principiu general
+## General principle
 
-Testarea se face în etape, de la simulare software la validare hardware în laborator acreditat. Nu se recomandă și nu se descrie testarea cu surse EMP de mare putere în afara unui laborator specializat, autorizat și dotat cu ecranare adecvată.
+Testing proceeds in stages, from software simulation to hardware validation in an accredited laboratory. Testing with high-power EMP sources outside a specialized, authorized laboratory equipped with adequate shielding is **not recommended and not described here**.
 
-## 1. Simulare (fără hardware)
+```mermaid
+flowchart LR
+    A["1. Simulation\n(SPICE, no hardware)"] --> B["2. Firmware unit tests\n(synthetic signals)"]
+    B --> C["3. Controlled low-voltage\nsignal injection (lab)"]
+    C --> D["4. Passive shielding\nvalidation (EMC lab)"]
+    D --> E["5. System-level testing\n(specialized/accredited lab only)"]
 
-- Rulează modelul din `simulation/spice/emp_pulse_sim.sp` cu ngspice pentru a valida răspunsul teoretic al circuitului de condiționare a semnalului.
-- Ajustează parametrii sursei de impuls (amplitudine, timp de creștere) pentru a acoperi scenariile din `docs/threat_model.md`.
-- Verifică marginile de siguranță ale componentelor (tensiuni maxime pe intrarea ADC etc.).
+    style A fill:#0b3d91,color:#fff
+    style B fill:#0b3d91,color:#fff
+    style C fill:#7a1f1f,color:#fff
+    style D fill:#7a1f1f,color:#fff
+    style E fill:#4a4a4a,color:#fff
+```
 
-## 2. Testare unitară a firmware-ului
+## 1. Simulation (no hardware)
 
-- Folosește fișierele din `firmware/tests/` pentru a valida algoritmul de detecție cu semnale sintetice (injectate prin funcții mock, nu prin hardware real).
-- Verifică: praguri corecte, comportament la histerezis, absența falselor pozitive pe seturi de date "semnal normal".
+- Run the model in [`simulation/spice/emp_pulse_sim.sp`](../simulation/spice/emp_pulse_sim.sp) with ngspice to validate the theoretical response of the signal-conditioning circuit.
+- Adjust the pulse-source parameters (amplitude, rise time) to cover the scenarios in [`docs/threat_model.md`](threat_model.md).
+- Verify component safety margins (maximum voltages at the ADC input, etc.).
 
-## 3. Injectare de semnal controlat (laborator, tensiune joasă)
+## 2. Firmware unit testing
 
-- Folosește un generator de impulsuri de laborator (nu o sursă EMP de mare putere) pentru a injecta tranzienți controlați, de amplitudine mică-medie, direct pe intrarea circuitului de condiționare.
-- Măsoară timpul real detecție → activare actuator, folosind un osciloscop cu bandă suficientă.
-- Documentează rezultatele față de valorile țintă din `docs/hardware_specs.md`.
+- Use the files in [`firmware/tests/`](../firmware/tests/) to validate the detection algorithm with synthetic signals (injected through mock functions, not real hardware).
+- Verify: correct thresholds, hysteresis behavior, absence of false positives on "normal signal" datasets.
 
-## 4. Validare a ecranării pasive
+## 3. Controlled signal injection (lab, low voltage)
 
-- Măsoară atenuarea incintei folosind echipament de testare EMC (generator de semnal + antenă de emisie + antenă de recepție în interior), într-o cameră anecoică sau printr-un laborator acreditat.
-- Compară rezultatele cu ținta declarată (> 80 dB) pe intervalul de frecvențe relevant.
+- Use a laboratory pulse generator (**not** a high-power EMP source) to inject controlled, small-to-medium amplitude transients directly into the conditioning circuit's input.
+- Measure the actual detection → actuator-activation time, using an oscilloscope with sufficient bandwidth.
+- Document the results against the target values in [`docs/hardware_specs.md`](hardware_specs.md).
 
-## 5. Testare la nivel de sistem (laborator specializat, opțional)
+## 4. Passive shielding validation
 
-- Testarea la niveluri de energie reprezentative pentru un eveniment EMP real trebuie efectuată **exclusiv** în facilități specializate, autorizate pentru acest tip de testare (de exemplu, laboratoare EMC/EMP acreditate conform IEC 61000-4-25 sau echivalent militar).
-- Acest proiect nu oferă și nu va oferi instrucțiuni pentru construirea unei surse de testare de mare putere.
+- Measure the enclosure's attenuation using EMC test equipment (signal generator + transmit antenna + receive antenna inside), in an anechoic chamber or through an accredited laboratory.
+- Compare results against the stated target (> 80 dB) over the relevant frequency range.
 
-## Șablon de raport de testare
+## 5. System-level testing (specialized lab, optional)
+
+- Testing at energy levels representative of a real EMP event must be performed **exclusively** in specialized facilities authorized for this type of testing (e.g., EMC/EMP laboratories accredited to IEC 61000-4-25 or an equivalent military standard).
+- This project does not provide, and will not provide, instructions for building a high-power test source.
+
+## Test report template
 
 ```
-Data testului: 
-Configurație hardware: 
-Parametri semnal injectat: 
-Timp de reacție măsurat: 
-Rezultat (PASS/FAIL față de țintă): 
-Observații: 
+Test date:
+Hardware configuration:
+Injected signal parameters:
+Measured reaction time:
+Result (PASS/FAIL vs. target):
+Observations:
 ```

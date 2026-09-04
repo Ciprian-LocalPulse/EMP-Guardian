@@ -1,10 +1,10 @@
-# EMP-Guardian - Makefile firmware
-# Autor: Ciprian Ștefan Pleșca
-# Licență: MIT
+# EMP-Guardian - Firmware Makefile
+# Author: Ciprian Ștefan Pleșca
+# License: MIT
 #
-# Acest Makefile este un punct de plecare generic. Pentru un target real
-# (ex. STM32F4), adaugă flag-urile specifice plăcii (mcu, linker script,
-# startup file) conform toolchain-ului ales (ex. arm-none-eabi-gcc).
+# This Makefile is a generic starting point. For a real target
+# (e.g. STM32F4), add the board-specific flags (mcu, linker script,
+# startup file) per your chosen toolchain (e.g. arm-none-eabi-gcc).
 
 TARGET      = emp_guardian
 BUILD_DIR   = build
@@ -34,8 +34,8 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test:
-	@mkdir -p $(BUILD_DIR)
 	gcc -Wall -I$(SRC_DIR) tests/test_emp_detector.c $(SRC_DIR)/emp_detector.c -o $(BUILD_DIR)/test_run
 	./$(BUILD_DIR)/test_run
+
 clean:
 	rm -rf $(BUILD_DIR)

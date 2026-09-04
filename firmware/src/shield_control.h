@@ -1,7 +1,7 @@
 /**
- * EMP-Guardian - Control actuator de ecranare
- * Autor: Ciprian Ștefan Pleșca
- * Licență: MIT
+ * EMP-Guardian - Shielding actuator control
+ * Author: Ciprian Ștefan Pleșca
+ * License: MIT
  */
 
 #ifndef SHIELD_CONTROL_H

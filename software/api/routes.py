@@ -1,7 +1,7 @@
 """
-EMP-Guardian - Rute API
-Autor: Ciprian Ștefan Pleșca
-Licență: MIT
+EMP-Guardian - API routes
+Author: Ciprian Ștefan Pleșca
+License: MIT
 """
 
 import json

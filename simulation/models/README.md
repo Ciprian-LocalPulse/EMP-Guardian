@@ -1,11 +1,11 @@
-# Modele de simulare
+# Simulation Models
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-Acest director este rezervat pentru modele suplimentare de simulare (electromagnetică, termică, mecanică a incintei ecranate). La momentul publicării inițiale a proiectului, singurul model disponibil este cel din `simulation/spice/emp_pulse_sim.sp`.
+This directory is reserved for additional simulation models (electromagnetic, thermal, mechanical for the shielded enclosure). At the time of the project's initial publication, the only available model is the one in [`simulation/spice/emp_pulse_sim.sp`](../spice/emp_pulse_sim.sp).
 
-## Contribuții binevenite
+## Contributions welcome
 
-- Modele de câmp electromagnetic pentru validarea atenuării unei incinte ecranate (ex. folosind unelte open-source de simulare EM).
-- Modele termice pentru actuatoarele de comutație rapidă.
-- Modele mecanice pentru carcasa/enclosure (vezi și `hardware/enclosure/`).
+- Electromagnetic field models for validating the attenuation of a shielded enclosure (e.g., using open-source EM simulation tools).
+- Thermal models for the fast-switching actuators.
+- Mechanical models for the enclosure/housing (see also [`hardware/enclosure/`](../../hardware/enclosure/)).

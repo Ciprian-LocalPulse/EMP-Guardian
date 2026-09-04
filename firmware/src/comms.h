@@ -1,7 +1,7 @@
 /**
- * EMP-Guardian - Modul de comunicație (raportare evenimente)
- * Autor: Ciprian Ștefan Pleșca
- * Licență: MIT
+ * EMP-Guardian - Communication module (event reporting)
+ * Author: Ciprian Ștefan Pleșca
+ * License: MIT
  */
 
 #ifndef COMMS_H

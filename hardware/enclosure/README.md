@@ -1,14 +1,14 @@
-# Carcasă / incintă ecranată
+# Enclosure / Shielded Housing
 
-**Autor:** Ciprian Ștefan Pleșca
-**Licență:** CERN-OHL-S v2 (vezi `../../LICENSE-HARDWARE`)
+**Author:** Ciprian Ștefan Pleșca
+**License:** CERN-OHL-S v2 (see `../../LICENSE-HARDWARE`)
 
-Acest director este rezervat pentru modele 3D (STL/STEP) ale carcasei ecranate (cușcă Faraday) în care se montează electronica protejată și placa EMP-Guardian.
+This directory is reserved for 3D models (STL/STEP) of the shielded enclosure (Faraday cage) housing the protected electronics and the EMP-Guardian board.
 
-## Recomandări de proiectare
+## Design recommendations
 
-- Continuitate electrică totală a suprafeței ecranate — orice deschidere (ventilație, cabluri) trebuie tratată cu filtre EMI dedicate sau garnituri conductive.
-- Punctele de trecere a cablurilor de alimentare/date trebuie să treacă prin filtre de linie, nu direct prin perete.
-- Ușile/capacele de acces trebuie să aibă garnituri conductive pentru a menține continuitatea ecranării.
+- Full electrical continuity of the shielded surface — every opening (ventilation, cables) must be treated with dedicated EMI filters or conductive gaskets.
+- Power/data cable feed-through points must pass through line filters, not directly through the wall.
+- Access doors/covers must have conductive gaskets to maintain shielding continuity.
 
-Detaliile de atenuare țintă sunt în `docs/hardware_specs.md`; validarea se face conform `docs/test_procedures.md`.
+Target attenuation details are in [`docs/hardware_specs.md`](../../docs/hardware_specs.md); validation follows [`docs/test_procedures.md`](../../docs/test_procedures.md).

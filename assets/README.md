@@ -1,7 +1,7 @@
 # Assets
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-Materiale vizuale asociate proiectului EMP-Guardian.
+Visual materials associated with the EMP-Guardian project.
 
-- `emp-guardian-cover.png` — imagine de copertă pentru README și materiale de prezentare. Ilustrație conceptuală, cu scop pur vizual/simbolic — nu reprezintă o schemă tehnică sau o simulare reală a unui eveniment EMP.
+- `emp-guardian-cover.png` — cover image for the README and presentation materials. Conceptual illustration, purely visual/symbolic in purpose — it does not represent a technical schematic or a real simulation of an EMP event.
