@@ -1,11 +1,11 @@
 /**
- * EMP-Guardian - EMP detection module
+ * EMP-Guardian - EMP detection module (v2 - dual-criterion state machine)
  * Author: Ciprian Ștefan Pleșca
  * License: MIT
  *
- * Portable implementation of the detection algorithm. Hardware access
- * functions (ADC) are isolated in emp_detector_hal_read_adc() so that
- * this file can be unit-tested without real hardware (see firmware/tests/).
+ * Portable implementation. Hardware access is isolated in
+ * emp_detector_hal_read_adc() so this file can be unit-tested without
+ * real hardware (see firmware/tests/).
  */
 
 #include "emp_detector.h"
@@ -14,14 +14,64 @@
 /* Declared in the board-specific HAL layer (not included in this generic repo) */
 extern uint16_t emp_detector_hal_read_adc(void);
 
-static uint16_t s_baseline_noise = 0;
-static uint8_t  s_above_threshold_counter = 0;
-static bool     s_latched = false;
+static emp_detector_state_t s_state           = EMP_DETECTOR_STATE_IDLE;
+static uint16_t              s_baseline        = 0;
+static uint16_t              s_prev_value      = 0;
+static uint8_t                s_confirm_counter = 0;
+static uint16_t              s_cooldown_counter = 0;
+static bool                   s_have_prev_value = false;
+
+/* ------------------------------------------------------------------ */
+/* Internal helpers                                                    */
+/* ------------------------------------------------------------------ */
+
+/* Updates the adaptive baseline using a fixed-point EWMA:
+ *   baseline += (value - baseline) >> ALPHA_SHIFT
+ * Computed in int32_t to correctly handle the case value < baseline. */
+static void update_baseline(uint16_t value) {
+    int32_t delta = (int32_t)value - (int32_t)s_baseline;
+    s_baseline = (uint16_t)(s_baseline + (delta >> EMP_BASELINE_ALPHA_SHIFT));
+}
+
+/* Amplitude criterion: is the sample above the adaptive threshold?
+ * A small amount of hysteresis is applied while a candidate event is
+ * being confirmed, so a single noisy sample near the boundary doesn't
+ * reset the confirmation counter. */
+static bool amplitude_criterion_met(uint16_t value, bool confirming) {
+    uint32_t threshold = (uint32_t)s_baseline + EMP_ADAPTIVE_MARGIN_ADC;
+    if (confirming && threshold >= EMP_HYSTERESIS_ADC) {
+        threshold -= EMP_HYSTERESIS_ADC;
+    }
+    return value >= threshold;
+}
+
+/* Rate-of-rise criterion: did the signal jump by more than the
+ * configured slope threshold since the previous sample? Uses the
+ * absolute value of the delta, since a fast *falling* edge immediately
+ * following a fast rising edge is also characteristic of a genuine
+ * transient (see the double-exponential waveform in the project wiki). */
+static bool slope_criterion_met(uint16_t value) {
+    if (!s_have_prev_value) {
+        return false;
+    }
+    int32_t delta = (int32_t)value - (int32_t)s_prev_value;
+    if (delta < 0) {
+        delta = -delta;
+    }
+    return delta >= EMP_SLOPE_THRESHOLD_ADC;
+}
+
+/* ------------------------------------------------------------------ */
+/* Public API                                                          */
+/* ------------------------------------------------------------------ */
 
 void emp_detector_init(void) {
-    s_baseline_noise = 0;
-    s_above_threshold_counter = 0;
-    s_latched = false;
+    s_state            = EMP_DETECTOR_STATE_IDLE;
+    s_baseline          = 0;
+    s_prev_value        = 0;
+    s_confirm_counter   = 0;
+    s_cooldown_counter  = 0;
+    s_have_prev_value   = false;
     /* Real peripheral initialization (ADC, DMA, timers) is done in the board HAL. */
 }
 
@@ -30,31 +80,82 @@ uint16_t emp_detector_read(void) {
 }
 
 bool emp_detector_is_emp(uint16_t value) {
-    uint16_t effective_threshold = EMP_THRESHOLD_ADC;
+    bool event_confirmed = false;
 
-    /* Hysteresis: if we are already "latched", we lower the exit threshold,
-     * not the entry threshold, to avoid rapid oscillation. */
-    if (s_latched) {
-        effective_threshold = EMP_THRESHOLD_ADC - EMP_HYSTERESIS_ADC;
+    switch (s_state) {
+
+        case EMP_DETECTOR_STATE_IDLE: {
+            /* Only adapt the baseline while nothing suspicious is happening -
+             * this prevents the detector from "learning" a real event as
+             * its new normal, which would suppress future detections. */
+            update_baseline(value);
+
+            bool amplitude_ok = amplitude_criterion_met(value, false);
+            bool slope_ok      = slope_criterion_met(value);
+
+            if (amplitude_ok && slope_ok) {
+                s_confirm_counter = 1;
+                s_state = EMP_DETECTOR_STATE_RISING;
+            }
+            break;
+        }
+
+        case EMP_DETECTOR_STATE_RISING: {
+            /* Do not update the baseline while a candidate event is in
+             * progress - the whole point is to compare against the
+             * pre-event noise floor. */
+            bool amplitude_ok = amplitude_criterion_met(value, true);
+
+            if (amplitude_ok) {
+                s_confirm_counter++;
+                if (s_confirm_counter >= EMP_CONFIRM_WINDOW_SAMPLES) {
+                    s_state = EMP_DETECTOR_STATE_LATCHED;
+                    event_confirmed = true;
+                }
+            } else {
+                /* Candidate event did not sustain - treat as a false
+                 * alarm (e.g. an isolated noise spike) and drop back. */
+                s_confirm_counter = 0;
+                s_state = EMP_DETECTOR_STATE_IDLE;
+            }
+            break;
+        }
+
+        case EMP_DETECTOR_STATE_LATCHED: {
+            /* Already reported. Waiting for emp_detector_reset_latch()
+             * to be called once the protective action has been handled. */
+            break;
+        }
+
+        case EMP_DETECTOR_STATE_COOLDOWN: {
+            s_cooldown_counter++;
+            if (s_cooldown_counter >= EMP_COOLDOWN_SAMPLES) {
+                s_state = EMP_DETECTOR_STATE_IDLE;
+                s_cooldown_counter = 0;
+            }
+            break;
+        }
     }
 
-    if (value >= effective_threshold) {
-        s_above_threshold_counter++;
-    } else {
-        s_above_threshold_counter = 0;
-        s_latched = false;
-        return false;
-    }
+    s_prev_value = value;
+    s_have_prev_value = true;
+    return event_confirmed;
+}
 
-    /* Confirmation time window: we require the signal to stay above
-     * threshold for a minimum number of consecutive samples, to filter
-     * out isolated noise spikes. */
-    if (s_above_threshold_counter >= EMP_CONFIRM_WINDOW_US) {
-        s_latched = true;
-        return true;
-    }
+emp_detector_state_t emp_detector_get_state(void) {
+    return s_state;
+}
 
-    return false;
+uint16_t emp_detector_get_baseline(void) {
+    return s_baseline;
+}
+
+void emp_detector_reset_latch(void) {
+    if (s_state == EMP_DETECTOR_STATE_LATCHED) {
+        s_state = EMP_DETECTOR_STATE_COOLDOWN;
+        s_cooldown_counter = 0;
+        s_confirm_counter = 0;
+    }
 }
 
 bool emp_detector_self_test(void) {
@@ -65,13 +166,12 @@ bool emp_detector_self_test(void) {
 }
 
 void emp_detector_recalibrate(void) {
-    /* Simple recalibration based on a moving average of the background noise.
-     * The full implementation (IIR filter/moving average) should be adapted
-     * to the actual characteristics of the sensor used. */
+    /* One-shot burst average, used at startup so the EWMA baseline does
+     * not begin from zero and slowly ramp up over many samples. */
     uint32_t sum = 0;
     const int samples = 32;
     for (int i = 0; i < samples; i++) {
         sum += emp_detector_hal_read_adc();
     }
-    s_baseline_noise = (uint16_t)(sum / samples);
+    s_baseline = (uint16_t)(sum / samples);
 }

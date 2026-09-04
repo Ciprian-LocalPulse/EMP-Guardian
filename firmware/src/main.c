@@ -22,6 +22,8 @@ int main(void) {
     }
 #endif
 
+    /* One-shot burst calibration so the adaptive baseline starts close
+     * to the real ambient noise floor instead of ramping up from zero. */
     emp_detector_recalibrate();
 
     while (1) {
@@ -31,7 +33,15 @@ int main(void) {
             shield_control_activate();
             comms_send_alert("EMP DETECTED");
             comms_send_status("shield_state", (int)shield_control_get_state());
+            comms_send_status("baseline", (int)emp_detector_get_baseline());
+
             shield_control_wait_reset();
+
+            /* Re-arm the detector: LATCHED -> COOLDOWN -> IDLE. The
+             * cooldown period lets the baseline stabilize again before
+             * the amplitude/slope criteria resume evaluating samples,
+             * preventing immediate re-triggering on residual transients. */
+            emp_detector_reset_latch();
         }
 
         /* Short pause to avoid saturating the sampling loop; in a real

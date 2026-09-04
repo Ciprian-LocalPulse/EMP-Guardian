@@ -19,8 +19,8 @@ EMP-Guardian aims to occupy that space — not as a replacement for existing sta
 
 In the spirit of intellectual honesty that any published technical work should uphold, we state the current status explicitly:
 
-- **The detection algorithm** is implemented and unit-tested (synthetic tests, no real hardware). Its logical correctness is verifiable; its real-world performance is not — yet.
-- **Threshold and hysteresis parameters** are initial design values, not results of experimental calibration. Any implementer must treat them as such.
+- **The detection algorithm** (v2: dual-criterion state machine — adaptive amplitude threshold combined with a rate-of-rise/slope criterion, see `docs/theory_of_operation.md`) is implemented and unit-tested against six scenarios, including explicit rejection of slow high-amplitude events (e.g. industrial switching) that a naive threshold-only detector would false-trigger on. Its logical correctness is verifiable; its real-world performance is not — yet.
+- **Threshold, margin, slope, and hysteresis parameters** are initial design values, not results of experimental calibration. Any implementer must treat them as such.
 - **Hardware components** (schematic, PCB, shielded enclosure) exist at the specification and bill-of-materials level, not as validated manufacturing files.
 - **No laboratory measurement** has yet been performed and published in this repository.
 
