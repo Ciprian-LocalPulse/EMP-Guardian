@@ -1,47 +1,58 @@
-# Principiul de funcționare
+# Theory of Operation
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-## Ce este un eveniment EMP, din perspectiva unui sistem de protecție
+## What an "EMP event" means from a protection system's perspective
 
-Din punctul de vedere al acestui sistem, un "EMP" este orice tranzient electromagnetic cu:
+From this system's point of view, an "EMP" is any electromagnetic transient with:
 
-- amplitudine peste un prag configurabil,
-- timp de creștere foarte scurt (de ordinul nanosecundelor–microsecundelor),
-- conținut spectral larg (de la kHz la sute de MHz sau GHz, în funcție de sursă).
+- amplitude above a configurable threshold,
+- a very short rise time (on the order of nanoseconds to microseconds),
+- broad spectral content (from kHz up to hundreds of MHz or GHz, depending on the source).
 
-Sistemul nu încearcă să identifice *cauza* evenimentului (natural sau nu) — tratează orice tranzient care depășește criteriile ca pe o amenințare și reacționează.
+The system does not attempt to identify the event's *cause* (natural or not) — it treats any transient exceeding the criteria as a threat and reacts.
 
-## De ce este nevoie de un algoritm de decizie, nu doar de un prag simplu
+## Why a decision algorithm is needed, not just a simple threshold
 
-Un simplu comparator de tensiune ar declanșa false alarme la:
+A simple voltage comparator would false-trigger on:
 
-- comutarea unor sarcini industriale mari,
-- descărcări electrostatice minore,
-- interferențe radio locale (stații radio, radare, telefonie mobilă).
+- switching of large industrial loads,
+- minor electrostatic discharges,
+- local radio interference (radio stations, radar, mobile telephony).
 
-De aceea, algoritmul de detecție combină:
+That's why the detection algorithm combines:
 
-1. **Prag de amplitudine** — nivelul minim al semnalului.
-2. **Fereastră temporală** — durata minimă/maximă cât semnalul rămâne peste prag.
-3. **Rată de creștere (dV/dt)** — cât de abrupt este frontul semnalului; evenimentele EMP au fronturi mult mai rapide decât comutațiile industriale obișnuite.
-4. **Histerezis** — pentru a evita oscilația rapidă între stările "activ"/"inactiv" în jurul pragului.
+1. **Amplitude threshold** — the minimum signal level.
+2. **Time window** — the minimum/maximum duration the signal must stay above threshold.
+3. **Rate of rise (dV/dt)** — how steep the signal edge is; EMP events have much faster edges than ordinary industrial switching.
+4. **Hysteresis** — to avoid rapid oscillation between "active"/"inactive" states around the threshold.
 
-## Latența sistemului
+```mermaid
+flowchart TD
+    A["New ADC sample"] --> B{"value >= effective_threshold?"}
+    B -- No --> C["Reset counter\nstate = Normal"]
+    B -- Yes --> D["Increment above-threshold counter"]
+    D --> E{"counter >= EMP_CONFIRM_WINDOW_US?"}
+    E -- No --> F["Wait for next sample"]
+    E -- Yes --> G["Latch = true\nEMP confirmed"]
+    G --> H["effective_threshold = THRESHOLD - HYSTERESIS\n(while latched)"]
+```
 
-Bugetul de timp total (țintă: sub 10 µs de la debutul evenimentului la activarea completă a ecranării) se împarte aproximativ astfel:
+## System latency
 
-| Etapă | Timp estimat |
+The total time budget (target: under 10 µs from event onset to full shielding activation) is broken down approximately as follows:
+
+| Stage | Estimated time |
 |---|---|
-| Propagare semnal prin circuitul de condiționare | ~0.5–1 µs |
-| Eșantionare ADC | ~0.4–1 µs la 1–2.4 MSPS |
-| Evaluare algoritm de decizie (firmware) | ~1–3 µs |
-| Comutare actuator (MOSFET/IGBT) | ~1–5 µs |
+| Signal propagation through conditioning circuit | ~0.5–1 µs |
+| ADC sampling | ~0.4–1 µs at 1–2.4 MSPS |
+| Decision algorithm evaluation (firmware) | ~1–3 µs |
+| Actuator switching (MOSFET/IGBT) | ~1–5 µs |
 
-Aceste valori sunt orientative și trebuie validate experimental pentru fiecare implementare hardware concretă — vezi `docs/test_procedures.md`.
+These values are indicative and must be experimentally validated for each concrete hardware implementation — see [`docs/test_procedures.md`](test_procedures.md).
 
-## Limitări cunoscute
+## Known limitations
 
-- Sistemul protejează echipamentul din interiorul incintei ecranate; nu poate proteja echipamente aflate în afara acesteia.
-- Un eveniment EMP de intensitate extremă, apărut înainte ca sistemul să ajungă la starea protejată, poate cauza totuși daune parțiale — de aceea proiectul recomandă și o ecranare pasivă permanentă (cușcă Faraday) ca primă linie de apărare, sistemul activ fiind un supliment, nu un înlocuitor.
-- Timpul de reacție depinde puternic de calitatea senzorului și a circuitului de condiționare; valorile din acest document sunt teoretice.
+- The system protects equipment inside the shielded enclosure; it cannot protect equipment located outside of it.
+- An extremely intense EMP event occurring before the system reaches its protected state can still cause partial damage — this is why the project also recommends permanent passive shielding (a Faraday cage) as the first line of defense, with the active system as a supplement, not a replacement.
+- Reaction time depends heavily on sensor and conditioning-circuit quality; the values in this document are theoretical.

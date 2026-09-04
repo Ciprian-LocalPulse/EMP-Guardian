@@ -1,18 +1,18 @@
-# Scheme electrice
+# Schematics
 
-**Autor:** Ciprian Ștefan Pleșca
-**Licență:** CERN-OHL-S v2 (vezi `../../LICENSE-HARDWARE`)
+**Author:** Ciprian Ștefan Pleșca
+**License:** CERN-OHL-S v2 (see `../../LICENSE-HARDWARE`)
 
-Acest director este destinat fișierelor sursă KiCad (`.kicad_sch`) și exporturilor PDF ale schemelor electrice pentru:
+This directory is intended for KiCad source files (`.kicad_sch`) and PDF exports of the electrical schematics for:
 
-- circuitul de condiționare a semnalului senzorului (senzor → limitator → ADC)
-- circuitul de comandă al actuatorului de ecranare
-- circuitul de alimentare (principal + rezervă)
+- the sensor signal-conditioning circuit (sensor → limiter → ADC)
+- the shielding actuator drive circuit
+- the power supply circuit (main + backup)
 
 ## Status
 
-Schema de referință (`emp_shield_v1`) este în lucru. Structura blocurilor funcționale este descrisă în `docs/architecture.md` și poate fi folosită ca punct de plecare pentru desenarea schemei complete în KiCad sau alt EDA open-source.
+The reference schematic (`emp_shield_v1`) is in progress. The functional block structure is described in [`docs/architecture.md`](../../docs/architecture.md) and can be used as a starting point for drawing the complete schematic in KiCad or another open-source EDA tool.
 
-## Contribuții
+## Contributions
 
-Contribuțiile cu scheme KiCad complete, verificate electric (ERC), sunt binevenite — vezi `CONTRIBUTING.md` din rădăcina proiectului.
+Contributions with complete, electrically verified (ERC) KiCad schematics are welcome — see [`CONTRIBUTING.md`](../../CONTRIBUTING.md) in the project root.

@@ -1,22 +1,22 @@
-# Cod de conduită
+# Code of Conduct
 
-## Angajamentul nostru
+## Our pledge
 
-Ca menținător și contribuitori la EMP-Guardian, ne angajăm să facem participarea la acest proiect o experiență liberă de hărțuire pentru toată lumea, indiferent de nivel de experiență, gen, orientare, dizabilitate, etnie, religie sau naționalitate.
+As the maintainer and contributors of EMP-Guardian, we pledge to make participation in this project a harassment-free experience for everyone, regardless of experience level, gender, sexual orientation, disability, ethnicity, religion, or nationality.
 
-## Standarde
+## Standards
 
-Comportament acceptat:
-- Limbaj respectuos și constructiv.
-- Acceptarea criticii tehnice de bună-credință.
-- Concentrare pe ce este mai bine pentru proiect și pentru comunitate.
+Examples of acceptable behavior:
+- Respectful and constructive language.
+- Accepting good-faith technical criticism.
+- Focusing on what is best for the project and the community.
 
-Comportament neacceptat:
-- Limbaj sau imagini cu conotație sexuală, atacuri personale, trolling.
-- Hărțuire publică sau privată.
-- Publicarea de informații private ale altora fără permisiune explicită.
-- Propunerea sau discutarea de aplicații ofensive ale tehnologiei EMP.
+Examples of unacceptable behavior:
+- Sexualized language or imagery, personal attacks, trolling.
+- Public or private harassment.
+- Publishing others' private information without explicit permission.
+- Proposing or discussing offensive applications of EMP technology.
 
-## Aplicare
+## Enforcement
 
-Cazurile de comportament abuziv pot fi raportate prin deschiderea unui issue confidențial sau prin contactarea directă a menținătorului, Ciprian Ștefan Pleșca. Toate reclamațiile vor fi analizate și vor primi un răspuns considerat necesar și adecvat circumstanțelor.
+Instances of abusive behavior may be reported by opening a confidential issue or by contacting the maintainer, Ciprian Ștefan Pleșca, directly. All complaints will be reviewed and will receive a response deemed necessary and appropriate to the circumstances.

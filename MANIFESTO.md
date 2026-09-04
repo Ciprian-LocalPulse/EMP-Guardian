@@ -1,48 +1,48 @@
-# Manifest EMP-Guardian
+# EMP-Guardian Manifesto
 
-**Autor:** Ciprian Ștefan Pleșca
-**Versiune:** 1.0 — septembrie 2026
+**Author:** Ciprian Ștefan Pleșca — Independent Researcher, Romania
+**Version:** 1.0 — September 2026
 
-## Preambul
+## Preamble
 
-Acest document nu este o specificație tehnică — acelea există deja în `docs/`. Este o declarație de poziție: de ce a fost inițiat proiectul EMP-Guardian, ce statut epistemic are în acest moment și ce fel de contribuție științifică își propune să fie.
+This document is not a technical specification — those already exist in [`docs/`](docs/). It is a position statement: why the EMP-Guardian project was started, what its current epistemic status is, and what kind of scientific contribution it aims to be.
 
-Îl scriem pentru că un repository tehnic, oricât de bine structurat, nu comunică de la sine motivația și limitele lui reale. Un cercetător care evaluează acest proiect are dreptul să știe exact ce are în față: un artefact validat experimental sau un cadru conceptual deschis pentru validare colectivă. Răspunsul, la momentul redactării acestui manifest, este al doilea.
+We write it because a technical repository, however well structured, does not communicate its real motivation and limitations on its own. A researcher evaluating this project has the right to know exactly what they are looking at: an experimentally validated artifact, or an open conceptual framework awaiting collective validation. As of this writing, the honest answer is the latter.
 
-## Poziționare
+## Positioning
 
-Protecția infrastructurii critice împotriva efectelor pulsului electromagnetic — fie de origine geomagnetică, fie industrială — este un domeniu tratat istoric în două moduri: prin standarde militare cu acces restricționat (MIL-STD-188-125, MIL-STD-461) și prin soluții comerciale proprietare, nedocumentate public. Între aceste două extreme există un gol: lipsa unui cadru **deschis, reproductibil și auditabil** pe care cercetătorii independenți, universitățile mici sau operatorii de infrastructură fără resurse de apărare să îl poată studia, adapta și îmbunătăți.
+Protecting critical infrastructure against electromagnetic pulse effects — whether geomagnetic or industrial in origin — has historically been addressed in two ways: through access-restricted military standards (MIL-STD-188-125, MIL-STD-461), or through proprietary commercial solutions with no public documentation. Between these two extremes lies a gap: the absence of an **open, reproducible, and auditable** framework that independent researchers, small universities, or resource-constrained infrastructure operators can study, adapt, and improve.
 
-EMP-Guardian își propune să ocupe acest spațiu. Nu ca alternativă la standardele existente, ci ca implementare de referință, documentată integral, care traduce principiile acelor standarde într-o formă pe care oricine o poate compila, testa și critica.
+EMP-Guardian aims to occupy that space — not as a replacement for existing standards, but as a fully documented reference implementation that translates the principles behind those standards into a form anyone can compile, test, and critique.
 
-## Statutul epistemic al proiectului
+## Epistemic status of the project
 
-În spiritul onestității intelectuale pe care orice lucrare tehnică publicată ar trebui să o respecte, declarăm explicit stadiul actual:
+In the spirit of intellectual honesty that any published technical work should uphold, we state the current status explicitly:
 
-- **Algoritmul de detecție** este implementat și testat unitar (teste sintetice, fără hardware real). Corectitudinea sa logică este verificabilă; performanța sa reală, nu.
-- **Parametrii de prag și histerezis** sunt valori de proiectare inițială, nu rezultate de calibrare experimentală. Ele trebuie tratate ca atare de orice implementator.
-- **Componentele hardware** (schemă electrică, PCB, carcasă ecranată) există la nivel de specificație și listă de componente, nu de fișiere de fabricație validate.
-- **Nicio măsurătoare de laborator** nu a fost încă efectuată și publicată în acest repository.
+- **The detection algorithm** is implemented and unit-tested (synthetic tests, no real hardware). Its logical correctness is verifiable; its real-world performance is not — yet.
+- **Threshold and hysteresis parameters** are initial design values, not results of experimental calibration. Any implementer must treat them as such.
+- **Hardware components** (schematic, PCB, shielded enclosure) exist at the specification and bill-of-materials level, not as validated manufacturing files.
+- **No laboratory measurement** has yet been performed and published in this repository.
 
-Această secțiune nu este o slăbiciune de ascuns, ci punctul de plecare corect pentru orice evaluare externă. Un proiect care își declară limitele cu precizie este mai util științific decât unul care lasă impresia unei validări inexistente.
+This section is not a weakness to hide — it is the correct starting point for any external evaluation. A project that states its limitations precisely is more scientifically useful than one that leaves the impression of validation that does not exist.
 
-## Ce înseamnă „complet" pentru acest proiect
+## What "complete" means for this project
 
-Completitudinea, în sensul urmărit aici, nu înseamnă absența lacunelor — orice sistem tehnic aflat la început are lacune. Înseamnă:
+Completeness, in the sense pursued here, does not mean the absence of gaps — any technical system at an early stage has gaps. It means:
 
-1. **Trasabilitate** — fiecare afirmație tehnică poate fi urmărită până la sursa ei (cod, standard citat, sau marcată explicit ca ipoteză de proiectare).
-2. **Reproductibilitate** — oricine poate clona repository-ul, compila firmware-ul, rula simularea și obține aceleași rezultate.
-3. **Falsificabilitate** — proiectul este construit astfel încât afirmațiile sale (timp de reacție, atenuare, prag de detecție) să poată fi testate și, eventual, infirmate experimental de oricine.
-4. **Deschidere la corecție** — structura de `CONTRIBUTING.md` există tocmai pentru ca lacunele identificate mai sus să fie închise de o comunitate, nu doar de un singur autor.
+1. **Traceability** — every technical claim can be traced back to its source (code, a cited standard, or explicitly flagged as a design assumption).
+2. **Reproducibility** — anyone can clone the repository, build the firmware, run the simulation, and obtain the same results.
+3. **Falsifiability** — the project is built so that its claims (reaction time, attenuation, detection threshold) can be tested and, if warranted, experimentally disproven by anyone.
+4. **Openness to correction** — the structure in [`CONTRIBUTING.md`](CONTRIBUTING.md) exists precisely so the gaps identified above can be closed by a community, not just by a single author.
 
-## Angajament etic
+## Ethical commitment
 
-Reiterăm aici, într-un registru mai puțin tehnic decât în `docs/threat_model.md` și `docs/compliance.md`, angajamentul fundamental al proiectului: EMP-Guardian este și va rămâne un proiect **strict defensiv**. Publicarea sa deschisă este o alegere deliberată — considerăm că reziliența colectivă a infrastructurii civile și științifice în fața evenimentelor electromagnetice este un bun public, iar cunoașterea necesară pentru a o construi nu ar trebui să fie monopolizată.
+We reiterate here, in a less technical register than in [`docs/threat_model.md`](docs/threat_model.md) and [`docs/compliance.md`](docs/compliance.md), the project's foundational commitment: EMP-Guardian is and will remain a **strictly defensive** project. Publishing it openly is a deliberate choice — we consider the collective resilience of civilian and scientific infrastructure against electromagnetic events to be a public good, and the knowledge needed to build it should not be monopolized.
 
-## Invitație
+## Invitation
 
-Acest manifest este o invitație explicită către cercetători, ingineri și instituții: verificați, contestați, măsurați, corectați. Un singur set de date experimentale publicat printr-un pull request valorează, pentru acest proiect, mai mult decât orice altă extindere a documentației teoretice.
+This manifesto is an explicit invitation to researchers, engineers, and institutions: verify, challenge, measure, correct. A single set of experimental data published through a pull request is worth more to this project than any further expansion of the theoretical documentation.
 
 ---
 
-*Ciprian Ștefan Pleșca, autor și menținător al proiectului EMP-Guardian.*
+*Ciprian Ștefan Pleșca, author and maintainer of the EMP-Guardian project.*

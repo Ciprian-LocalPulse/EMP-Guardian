@@ -1,49 +1,49 @@
-# Specificații hardware
+# Hardware Specifications
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-Acestea sunt specificațiile de referință pentru varianta v1 a proiectului. Sunt orientative — trebuie ajustate/validate în funcție de componentele efectiv disponibile și de mediul de operare.
+These are the reference specifications for the v1 variant of the project. They are indicative — they must be adjusted/validated based on the components actually available and the operating environment.
 
-## Microcontroler
+## Microcontroller
 
-- **Familie recomandată:** STM32F4 (ex. STM32F411/STM32F407), ARM Cortex-M4 @ 100 MHz
-- **Alternative suportate în firmware (portabile cu efort moderat):** RP2040, ESP32-S3, MSP430FR
-- **ADC:** minim 12-bit, ≥ 2 MSPS
-- **Memorie nevolatilă:** pentru jurnalul de evenimente (Flash internă sau EEPROM extern)
+- **Recommended family:** STM32F4 (e.g., STM32F411/STM32F407), ARM Cortex-M4 @ 100 MHz
+- **Alternatives supported in firmware (portable with moderate effort):** RP2040, ESP32-S3, MSP430FR
+- **ADC:** minimum 12-bit, ≥ 2 MSPS
+- **Non-volatile memory:** for the event log (internal Flash or external EEPROM)
 
-## Senzor
+## Sensor
 
-- **Tip:** bobină Rogowski cu nucleu de ferită sau antenă de bandă largă (biconică/log-periodică pentru variante de laborator)
-- **Bandă de frecvență:** 10 kHz – 1 GHz (obiectiv de proiectare; performanța reală depinde de senzorul folosit)
-- **Circuit de condiționare:** amplificator de instrumentație + limitator (diode de protecție) + filtru anti-aliasing
+- **Type:** Rogowski coil with ferrite core, or broadband antenna (biconical/log-periodic for lab variants)
+- **Frequency band:** 10 kHz – 1 GHz (design target; actual performance depends on the sensor used)
+- **Conditioning circuit:** instrumentation amplifier + limiter (protection diodes) + anti-aliasing filter
 
-## Actuator de ecranare
+## Shielding actuator
 
-- **Tehnologie:** MOSFET/IGBT de comutație rapidă sau relee cu stare solidă (SSR)
-- **Timp de comutare țintă:** < 5 µs
-- **Curent/tensiune:** dimensionate în funcție de sarcina protejată — a se specifica per proiect
+- **Technology:** fast-switching MOSFET/IGBT or solid-state relays (SSR)
+- **Target switching time:** < 5 µs
+- **Current/voltage:** sized according to the protected load — specify per project
 
-## Ecranare pasivă (recomandată ca linie de bază)
+## Passive shielding (recommended as baseline)
 
-- **Material:** plasă de cupru sau tablă perforată
-- **Atenuare țintă:** > 80 dB până la 10 GHz (valoare de referință pentru incinte de tip cușcă Faraday de calitate industrială — se validează prin măsurători, nu se presupune implicit)
+- **Material:** copper mesh or perforated sheet metal
+- **Target attenuation:** > 80 dB up to 10 GHz (reference value for an industrial-grade Faraday-cage enclosure — validated through measurement, never assumed)
 
-## Alimentare
+## Power supply
 
-- **Tensiune principală:** 5V DC (sau conform proiectului specific)
-- **Rezervă:** baterie Li-ion sau supercondensator, dimensionată pentru minim câteva secunde de funcționare autonomă
+- **Main voltage:** 5V DC (or per specific project)
+- **Backup:** Li-ion battery or supercapacitor, sized for at least a few seconds of autonomous operation
 
-## Interfețe
+## Interfaces
 
-- UART (debug și telemetrie de bază)
-- I2C / SPI (senzori auxiliari, memorie externă)
-- Ethernet (opțional, pentru integrare în rețele de monitorizare)
+- UART (debug and basic telemetry)
+- I2C / SPI (auxiliary sensors, external memory)
+- Ethernet (optional, for integration into monitoring networks)
 
-## Condiții de mediu
+## Environmental conditions
 
-- **Temperatură de operare:** -40 °C … +85 °C (țintă industrială; a se valida pe componentele alese)
-- **Umiditate:** conform mediului de instalare — a se specifica per proiect
+- **Operating temperature:** -40 °C … +85 °C (industrial target; validate against chosen components)
+- **Humidity:** per installation environment — specify per project
 
-## Notă importantă
+## Important note
 
-Valorile de mai sus sunt specificații **de referință/proiectare**, nu rezultate de testare certificată. Orice implementare destinată unui mediu instituțional sau militar trebuie validată printr-un laborator acreditat, conform standardelor aplicabile (vezi `docs/compliance.md`).
+The values above are **reference/design** specifications, not certified test results. Any implementation intended for an institutional or military environment must be validated by an accredited laboratory, per applicable standards (see [`docs/compliance.md`](compliance.md)).

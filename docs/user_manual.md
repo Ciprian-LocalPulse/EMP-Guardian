@@ -1,15 +1,15 @@
-# Manual de utilizare
+# User Manual
 
-**Autor:** Ciprian Ștefan Pleșca
+**Author:** Ciprian Ștefan Pleșca
 
-## 1. Cerințe
+## 1. Requirements
 
-- Placă de dezvoltare STM32F4 (sau MCU compatibil) cu toolchain ARM GCC instalat
-- Programator/debugger (ST-Link sau echivalent)
-- Python 3.9+ pentru aplicația de monitorizare
-- Senzor EMP conectat conform schemei din `hardware/schematics/`
+- STM32F4 development board (or compatible MCU) with the ARM GCC toolchain installed
+- Programmer/debugger (ST-Link or equivalent)
+- Python 3.9+ for the monitoring application
+- EMP sensor wired according to the schematic in [`hardware/schematics/`](../hardware/schematics/)
 
-## 2. Instalare firmware
+## 2. Firmware installation
 
 ```bash
 cd firmware
@@ -17,15 +17,15 @@ make clean && make
 st-flash write build/emp_guardian.bin 0x08000000
 ```
 
-## 3. Configurare
+## 3. Configuration
 
-Editează `firmware/src/config.h` pentru a ajusta:
+Edit [`firmware/src/config.h`](../firmware/src/config.h) to adjust:
 
-- pragul de detecție (`EMP_THRESHOLD_ADC`)
-- durata ferestrei temporale de confirmare
-- pinii folosiți pentru actuator și comunicație
+- the detection threshold (`EMP_THRESHOLD_ADC`)
+- the confirmation time-window duration
+- the pins used for the actuator and communication
 
-## 4. Pornire aplicație de monitorizare
+## 4. Starting the monitoring application
 
 ```bash
 cd software/monitor
@@ -33,22 +33,22 @@ pip install -r requirements.txt
 python emp_monitor.py --port /dev/ttyUSB0 --baud 115200
 ```
 
-Aplicația afișează în timp real evenimentele raportate de firmware și le salvează într-un jurnal local.
+The application displays firmware-reported events in real time and saves them to a local log.
 
-## 5. Interpretarea alertelor
+## 5. Interpreting alerts
 
-| Mesaj | Semnificație |
+| Message | Meaning |
 |---|---|
-| `EMP DETECTED` | Eveniment confirmat, ecranare activată automat |
-| `THRESHOLD_ADJUSTED` | Pragul de detecție a fost recalibrat |
-| `SELF_TEST_OK` / `SELF_TEST_FAIL` | Rezultatul auto-testului la pornire |
+| `EMP DETECTED` | Event confirmed, shielding activated automatically |
+| `THRESHOLD_ADJUSTED` | Detection threshold was recalibrated |
+| `SELF_TEST_OK` / `SELF_TEST_FAIL` | Result of the power-on self-test |
 
-## 6. Resetare după eveniment
+## 6. Reset after an event
 
-După activare, sistemul așteaptă implicit un interval configurabil (`shield_control_wait_reset`) înainte de a reveni la starea normală. Pentru medii critice, se recomandă resetare manuală, controlată de operator, în loc de resetare automată.
+After activation, the system by default waits a configurable interval (`shield_control_wait_reset`) before returning to normal state. For critical environments, manual, operator-controlled reset is recommended instead of automatic reset.
 
-## 7. Depanare
+## 7. Troubleshooting
 
-- **Nu se conectează pe portul serial:** verifică drepturile de acces la port (`sudo usermod -a -G dialout $USER` pe Linux) și că firmware-ul a fost flashat cu succes.
-- **False pozitive frecvente:** mărește pragul (`EMP_THRESHOLD_ADC`) sau ajustează fereastra temporală de confirmare; verifică ecranarea cablajului senzorului.
-- **Timp de reacție prea mare:** verifică frecvența de eșantionare ADC și elimină operații blocante din bucla principală.
+- **Cannot connect on the serial port:** check port access permissions (`sudo usermod -a -G dialout $USER` on Linux) and that the firmware was flashed successfully.
+- **Frequent false positives:** increase the threshold (`EMP_THRESHOLD_ADC`) or adjust the confirmation time window; check the sensor cabling's shielding.
+- **Reaction time too high:** check the ADC sampling frequency and remove blocking operations from the main loop.

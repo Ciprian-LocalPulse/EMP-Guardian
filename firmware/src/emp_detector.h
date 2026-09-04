@@ -1,7 +1,7 @@
 /**
- * EMP-Guardian - Modul de detecție EMP
- * Autor: Ciprian Ștefan Pleșca
- * Licență: MIT
+ * EMP-Guardian - EMP detection module
+ * Author: Ciprian Ștefan Pleșca
+ * License: MIT
  */
 
 #ifndef EMP_DETECTOR_H
@@ -11,29 +11,29 @@
 #include <stdbool.h>
 
 /**
- * Inițializează ADC-ul și circuitele auxiliare folosite pentru detecție.
+ * Initializes the ADC and auxiliary circuits used for detection.
  */
 void emp_detector_init(void);
 
 /**
- * Citește ultima valoare eșantionată de la senzor.
+ * Reads the latest value sampled from the sensor.
  */
 uint16_t emp_detector_read(void);
 
 /**
- * Evaluează dacă valoarea curentă, combinată cu istoricul recent,
- * constituie un eveniment EMP confirmat (prag + fereastră temporală + histerezis).
+ * Evaluates whether the current value, combined with recent history,
+ * constitutes a confirmed EMP event (threshold + time window + hysteresis).
  */
 bool emp_detector_is_emp(uint16_t value);
 
 /**
- * Rulează un auto-test la pornire (verifică integritatea lanțului senzor -> ADC).
- * Returnează true dacă auto-testul a trecut.
+ * Runs a self-test at startup (checks the integrity of the sensor -> ADC chain).
+ * Returns true if the self-test passed.
  */
 bool emp_detector_self_test(void);
 
 /**
- * Recalibrează pragul de detecție pe baza zgomotului de fond măsurat.
+ * Recalibrates the detection threshold based on the measured background noise.
  */
 void emp_detector_recalibrate(void);
 

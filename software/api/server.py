@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-EMP-Guardian - Server API pentru expunerea evenimentelor
-Autor: Ciprian Ștefan Pleșca
-Licență: MIT
+EMP-Guardian - API server for exposing events
+Author: Ciprian Ștefan Pleșca
+License: MIT
 
-Server minimal (Flask) care citește jurnalul produs de emp_monitor.py
-și îl expune printr-un API REST simplu, util pentru integrare cu
-sisteme de monitorizare instituționale (dashboard, SCADA, SIEM etc.).
+Minimal (Flask) server that reads the log produced by emp_monitor.py
+and exposes it through a simple REST API, useful for integration with
+institutional monitoring systems (dashboard, SCADA, SIEM, etc.).
 """
 
 import json
