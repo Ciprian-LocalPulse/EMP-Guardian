@@ -34,8 +34,8 @@ $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 test:
+	@mkdir -p $(BUILD_DIR)
 	gcc -Wall -I$(SRC_DIR) tests/test_emp_detector.c $(SRC_DIR)/emp_detector.c -o $(BUILD_DIR)/test_run
 	./$(BUILD_DIR)/test_run
-
 clean:
 	rm -rf $(BUILD_DIR)
