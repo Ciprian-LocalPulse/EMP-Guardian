@@ -119,6 +119,8 @@ sequenceDiagram
 ```
 EMP-Guardian/
 ├── README.md
+├── CHANGELOG.md
+├── SUPPORT.md
 ├── MANIFESTO.md
 ├── DONATE.md
 ├── LICENSE
@@ -127,6 +129,13 @@ EMP-Guardian/
 ├── CODE_OF_CONDUCT.md
 ├── SECURITY.md
 ├── CITATION.cff
+├── .gitignore
+├── .editorconfig
+├── .github/
+│   ├── dependabot.yml
+│   ├── workflows/ci.yml
+│   ├── ISSUE_TEMPLATE/
+│   └── PULL_REQUEST_TEMPLATE.md
 ├── assets/
 │   └── emp-guardian-cover.png
 ├── docs/
@@ -136,7 +145,8 @@ EMP-Guardian/
 │   ├── threat_model.md
 │   ├── test_procedures.md
 │   ├── compliance.md
-│   └── user_manual.md
+│   ├── user_manual.md
+│   └── future_work.md
 ├── firmware/
 │   ├── src/              # portable: app.c/h, emp_detector, shield_control, comms, config.h, main.c
 │   ├── include/          # hal.h - the one contract every board port implements
@@ -193,7 +203,7 @@ ngspice emp_pulse_sim.sp
 
 ## Documentation
 
-See the [`docs/`](docs/) directory for architecture, theory of operation, hardware specifications, threat model, test procedures, and legal/compliance considerations.
+See the [`docs/`](docs/) directory for architecture, theory of operation, hardware specifications, threat model, test procedures, and legal/compliance considerations. See [`docs/future_work.md`](docs/future_work.md) for research directions under consideration (not yet implemented).
 
 For how this project positions itself relative to existing literature and its academic motivation, see [`MANIFESTO.md`](MANIFESTO.md).
 
