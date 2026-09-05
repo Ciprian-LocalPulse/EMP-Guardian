@@ -2,15 +2,17 @@
  * EMP-Guardian - Communication module (event reporting)
  * Author: Ciprian Ștefan Pleșca
  * License: MIT
+ *
+ * Portability note: this file calls exclusively through the HAL
+ * contract in firmware/include/hal.h. See firmware/boards/<board>/
+ * for the actual per-board implementations of emp_hal_uart_init()
+ * and emp_hal_uart_write().
  */
 
 #include "comms.h"
 #include "config.h"
+#include "hal.h"
 #include <stdio.h>
-
-/* Generic UART HAL layer - implement for your board */
-extern void emp_hal_uart_init(uint32_t baudrate);
-extern void emp_hal_uart_write(const char *data, int len);
 
 void comms_init(void) {
     emp_hal_uart_init(UART_BAUDRATE);

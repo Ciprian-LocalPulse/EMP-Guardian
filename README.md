@@ -138,9 +138,12 @@ EMP-Guardian/
 │   ├── compliance.md
 │   └── user_manual.md
 ├── firmware/
-│   ├── src/
-│   ├── include/
-│   ├── tests/
+│   ├── src/              # portable: app.c/h, emp_detector, shield_control, comms, config.h, main.c
+│   ├── include/          # hal.h - the one contract every board port implements
+│   ├── boards/           # per-board HAL implementations (stm32, rp2040, ...)
+│   │   ├── stm32/
+│   │   └── rp2040/
+│   ├── tests/            # host-side unit tests (mocked HAL, no board SDK needed)
 │   └── Makefile
 ├── software/
 │   ├── monitor/
@@ -158,12 +161,19 @@ EMP-Guardian/
 
 ## Quick start
 
-Build the firmware (default target: STM32F4, portable to any ARM Cortex-M MCU with a fast ADC):
+Build the firmware (default board: STM32F4; `make BOARD=rp2040` targets the Pico SDK skeleton instead - see `firmware/boards/`):
 
 ```bash
 cd firmware
 make
-st-flash write build/emp_guardian.bin 0x08000000
+st-flash write build/stm32/emp_guardian.bin 0x08000000
+```
+
+Run the firmware's host-side unit tests (no board, no cross-compiler required):
+
+```bash
+cd firmware
+make test
 ```
 
 Monitoring application (Python 3.9+):

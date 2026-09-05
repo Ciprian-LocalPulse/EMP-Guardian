@@ -10,9 +10,10 @@
 
 #include "emp_detector.h"
 #include "config.h"
+#include "hal.h"
 
-/* Declared in the board-specific HAL layer (not included in this generic repo) */
-extern uint16_t emp_detector_hal_read_adc(void);
+/* emp_detector_hal_read_adc() is declared in hal.h and implemented per
+ * board in firmware/boards/<board>/. */
 
 static emp_detector_state_t s_state           = EMP_DETECTOR_STATE_IDLE;
 static uint16_t              s_baseline        = 0;

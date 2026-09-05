@@ -14,6 +14,7 @@
 #include <assert.h>
 #include "emp_detector.h"
 #include "config.h"
+#include "hal.h"
 
 static uint16_t s_mock_adc_value = 0;
 

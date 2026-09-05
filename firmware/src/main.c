@@ -1,52 +1,29 @@
 /**
- * EMP-Guardian - Main firmware loop
+ * EMP-Guardian - Firmware entry point
  * Author: Ciprian Ștefan Pleșca
  * License: MIT
+ *
+ * This file is intentionally board-agnostic: it contains no HAL calls
+ * and no vendor SDK includes. The exact same main() is linked against
+ * any board port (STM32, RP2040, a future port) - see
+ * firmware/boards/<board>/ for the hardware-specific code, and app.c
+ * for the portable init/step sequence this file calls.
  */
 
-#include "emp_detector.h"
-#include "shield_control.h"
-#include "comms.h"
-#include "config.h"
+#include "app.h"
 
 int main(void) {
-    emp_detector_init();
-    shield_control_init();
-    comms_init();
-
-#if SELF_TEST_ON_BOOT
-    if (!emp_detector_self_test()) {
-        comms_send_alert("SELF_TEST_FAIL");
-    } else {
-        comms_send_alert("SELF_TEST_OK");
-    }
-#endif
-
-    /* One-shot burst calibration so the adaptive baseline starts close
-     * to the real ambient noise floor instead of ramping up from zero. */
-    emp_detector_recalibrate();
+    emp_guardian_app_init();
 
     while (1) {
-        uint16_t adc_value = emp_detector_read();
+        emp_guardian_app_step();
 
-        if (emp_detector_is_emp(adc_value)) {
-            shield_control_activate();
-            comms_send_alert("EMP DETECTED");
-            comms_send_status("shield_state", (int)shield_control_get_state());
-            comms_send_status("baseline", (int)emp_detector_get_baseline());
-
-            shield_control_wait_reset();
-
-            /* Re-arm the detector: LATCHED -> COOLDOWN -> IDLE. The
-             * cooldown period lets the baseline stabilize again before
-             * the amplitude/slope criteria resume evaluating samples,
-             * preventing immediate re-triggering on residual transients. */
-            emp_detector_reset_latch();
-        }
-
-        /* Short pause to avoid saturating the sampling loop; in a real
-         * implementation, a timer-interrupt trigger is recommended
-         * instead of a busy-wait loop. */
+        /* Pacing between samples. This busy-wait is a placeholder for a
+         * bare-metal superloop; a real deployment should instead drive
+         * emp_guardian_app_step() from a timer ISR or an RTOS task at
+         * the sample rate required by docs/hardware_specs.md, so the
+         * detection latency budget in docs/theory_of_operation.md is
+         * met deterministically. */
         for (volatile int i = 0; i < 10000; i++) { }
     }
 }
