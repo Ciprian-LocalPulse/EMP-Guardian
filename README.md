@@ -157,7 +157,8 @@ EMP-Guardian/
 │   └── Makefile
 ├── software/
 │   ├── monitor/
-│   └── api/
+│   ├── api/
+│   └── calculator/       # emp_calculator.py - skin depth, shielding SE, Rogowski, latency budget
 ├── hardware/
 │   ├── schematics/
 │   ├── pcb/gerber/
@@ -192,6 +193,14 @@ Monitoring application (Python 3.9+):
 cd software/monitor
 pip install -r requirements.txt
 python emp_monitor.py --port /dev/ttyUSB0
+```
+
+Engineering calculator (skin depth, shielding effectiveness, Rogowski sensor sensitivity, latency budget - see `software/calculator/README.md` for full details and honesty notes):
+
+```bash
+cd software/calculator
+python3 emp_calculator.py shielding --freq 1e6 --thickness-mm 1.0 --material copper
+python3 -m unittest test_emp_calculator.py -v
 ```
 
 Detection circuit simulation (requires ngspice):

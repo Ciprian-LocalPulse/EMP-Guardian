@@ -36,3 +36,16 @@ jobs:
           pip install flake8
       - name: Rulează flake8
         run: flake8 software/monitor/emp_monitor.py --max-line-length=110
+
+  calculator-tests:
+    name: Teste unitare calculator inginerie
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Rulează testele calculatorului (16 teste, fără dependențe)
+        run: |
+          cd software/calculator
+          python3 -m unittest test_emp_calculator.py -v
