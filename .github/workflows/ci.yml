@@ -45,7 +45,7 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
-      - name: Rulează testele calculatorului (16 teste, fără dependențe)
+      - name: Rulează testele calculatorului (22 teste, fără dependențe)
         run: |
           cd software/calculator
           python3 -m unittest test_emp_calculator.py -v

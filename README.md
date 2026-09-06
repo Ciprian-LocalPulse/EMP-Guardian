@@ -136,8 +136,6 @@ EMP-Guardian/
 │   ├── workflows/ci.yml
 │   ├── ISSUE_TEMPLATE/
 │   └── PULL_REQUEST_TEMPLATE.md
-├── assets/
-│   └── emp-guardian-cover.png
 ├── docs/
 │   ├── architecture.md
 │   ├── theory_of_operation.md
@@ -146,19 +144,21 @@ EMP-Guardian/
 │   ├── test_procedures.md
 │   ├── compliance.md
 │   ├── user_manual.md
+│   ├── WHITEPAPER.md
 │   └── future_work.md
 ├── firmware/
 │   ├── src/              # portable: app.c/h, emp_detector, shield_control, comms, config.h, main.c
 │   ├── include/          # hal.h - the one contract every board port implements
-│   ├── boards/           # per-board HAL implementations (stm32, rp2040, ...)
+│   ├── boards/           # per-board HAL implementations
 │   │   ├── stm32/
-│   │   └── rp2040/
+│   │   ├── rp2040/
+│   │   └── esp32/
 │   ├── tests/            # host-side unit tests (mocked HAL, no board SDK needed)
 │   └── Makefile
 ├── software/
 │   ├── monitor/
 │   ├── api/
-│   └── calculator/       # emp_calculator.py - skin depth, shielding SE, Rogowski, latency budget
+│   └── calculator/       # emp_calculator.py - skin depth, shielding SE, Rogowski, latency, E1 waveform
 ├── hardware/
 │   ├── schematics/
 │   ├── pcb/gerber/
@@ -167,12 +167,16 @@ EMP-Guardian/
 ├── simulation/
 │   ├── spice/
 │   └── models/
-└── .github/workflows/ci.yml
+└── assets/
+    ├── emp-guardian-cover.png
+    ├── system_block_diagram.svg
+    ├── enclosure_cross_section.svg
+    └── rogowski_sensor_mount.svg
 ```
 
 ## Quick start
 
-Build the firmware (default board: STM32F4; `make BOARD=rp2040` targets the Pico SDK skeleton instead - see `firmware/boards/`):
+Build the firmware (default board: STM32F4; `make BOARD=rp2040` targets the Pico SDK skeleton, `make BOARD=esp32` the ESP-IDF skeleton instead - see `firmware/boards/`):
 
 ```bash
 cd firmware
@@ -212,7 +216,7 @@ ngspice emp_pulse_sim.sp
 
 ## Documentation
 
-See the [`docs/`](docs/) directory for architecture, theory of operation, hardware specifications, threat model, test procedures, and legal/compliance considerations. See [`docs/future_work.md`](docs/future_work.md) for research directions under consideration (not yet implemented).
+See the [`docs/`](docs/) directory for architecture, theory of operation, hardware specifications, threat model, test procedures, and legal/compliance considerations. See [`docs/WHITEPAPER.md`](docs/WHITEPAPER.md) for a publication-style paper on the system's design rationale and governing physics, and [`docs/future_work.md`](docs/future_work.md) for research directions under consideration (not yet implemented).
 
 For how this project positions itself relative to existing literature and its academic motivation, see [`MANIFESTO.md`](MANIFESTO.md).
 

@@ -17,6 +17,8 @@ These are the reference specifications for the v1 variant of the project. They a
 - **Frequency band:** 10 kHz – 1 GHz (design target; actual performance depends on the sensor used)
 - **Conditioning circuit:** instrumentation amplifier + limiter (protection diodes) + anti-aliasing filter
 
+See [`assets/rogowski_sensor_mount.svg`](../assets/rogowski_sensor_mount.svg) for the mounting geometry and the mutual-inductance formula, cross-checked against `software/calculator/emp_calculator.py`'s `rogowski_sensitivity()`.
+
 ## Shielding actuator
 
 - **Technology:** fast-switching MOSFET/IGBT or solid-state relays (SSR)
@@ -27,6 +29,8 @@ These are the reference specifications for the v1 variant of the project. They a
 
 - **Material:** copper mesh or perforated sheet metal
 - **Target attenuation:** > 80 dB up to 10 GHz (reference value for an industrial-grade Faraday-cage enclosure — validated through measurement, never assumed)
+
+See [`assets/enclosure_cross_section.svg`](../assets/enclosure_cross_section.svg) for the wall build-up and seam/gasket detail — the seam, not the flat panel, is typically the weak point in a real enclosure.
 
 ## Power supply
 

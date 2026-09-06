@@ -12,6 +12,8 @@
 #                           see boards/stm32/hal_stm32.c's header comment)
 #   make BOARD=rp2040      - RP2040 uses the Pico SDK's own CMake build,
 #                           not this Makefile - see boards/rp2040/hal_rp2040.c
+#   make BOARD=esp32       - ESP32 uses ESP-IDF's own idf.py build,
+#                           not this Makefile - see boards/esp32/hal_esp32.c
 #
 # BOARD defaults to stm32, the only board with a Makefile-compatible
 # vendor toolchain among the current reference ports.

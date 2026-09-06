@@ -16,8 +16,24 @@ first tagged release exists.
 - `firmware/src/app.c` / `app.h` — the portable init/step application loop,
   identical across every board. `firmware/src/main.c` is now board-agnostic
   and simply drives this loop.
-- `firmware/boards/stm32/hal_stm32.c` and `firmware/boards/rp2040/hal_rp2040.c`
-  — reference HAL ports for STM32 (STM32Cube HAL) and RP2040 (Pico SDK).
+- `firmware/boards/stm32/hal_stm32.c`, `firmware/boards/rp2040/hal_rp2040.c`,
+  and `firmware/boards/esp32/hal_esp32.c` — reference HAL ports for STM32
+  (STM32Cube HAL), RP2040 (Pico SDK), and ESP32 (ESP-IDF).
+- `software/calculator/emp_calculator.py` — a dependency-free engineering
+  calculator (skin depth, shielding effectiveness across multiple named
+  materials, Rogowski coil sensitivity, latency budget, E1-style waveform
+  modeling), unit-tested against known reference values.
+- `assets/system_block_diagram.svg`, `assets/enclosure_cross_section.svg`,
+  `assets/rogowski_sensor_mount.svg` — technical reference diagrams,
+  cross-linked from the relevant docs and from the calculator's functions.
+- `docs/WHITEPAPER.md` — a publication-style paper documenting the system's
+  design rationale, governing physics, and detection theory, with an
+  explicit distinction between what is implemented/verified and what
+  remains a design assumption.
+- `docs/future_work.md` — tracks research directions (ML-based classifiers,
+  fleet-level correlation, the SE "B" correction term) explicitly marked
+  as not implemented, so scope discussions don't inflate what the current
+  firmware actually does.
 - `firmware/tests/hal_mock.c` — a shared HAL mock for host-side unit tests.
 - `firmware/tests/test_shield_control.c` and `firmware/tests/test_app.c` —
   new unit/integration tests covering the shielding actuator and the full

@@ -1,0 +1,84 @@
+<svg viewBox="0 0 1000 560" xmlns="http://www.w3.org/2000/svg" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#222"/>
+    </marker>
+  </defs>
+
+  <rect width="1000" height="560" fill="#ffffff"/>
+  <text x="500" y="32" text-anchor="middle" font-size="20" font-weight="700" fill="#111">EMP-Guardian — System Block Diagram</text>
+  <text x="500" y="52" text-anchor="middle" font-size="12" fill="#666">Detection chain -&gt; Decision unit -&gt; Protection actuator -&gt; Reporting layer</text>
+
+  <!-- Sensing group -->
+  <rect x="30" y="90" width="290" height="150" rx="8" fill="#eaf1fb" stroke="#0b3d91" stroke-width="1.5"/>
+  <text x="45" y="110" font-size="12" font-weight="700" fill="#0b3d91">DETECTION CHAIN</text>
+
+  <rect x="50" y="125" width="240" height="45" rx="6" fill="#0b3d91"/>
+  <text x="170" y="144" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Sensor</text>
+  <text x="170" y="160" text-anchor="middle" font-size="10.5" fill="#dce6fa">Rogowski coil / broadband antenna</text>
+
+  <rect x="50" y="180" width="240" height="45" rx="6" fill="#0b3d91"/>
+  <text x="170" y="199" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Signal conditioning</text>
+  <text x="170" y="215" text-anchor="middle" font-size="10.5" fill="#dce6fa">amp + limiter + anti-alias filter</text>
+
+  <line x1="170" y1="170" x2="170" y2="180" stroke="#0b3d91" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- ADC -->
+  <rect x="345" y="147" width="140" height="45" rx="6" fill="#0b3d91"/>
+  <text x="415" y="166" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">ADC</text>
+  <text x="415" y="182" text-anchor="middle" font-size="10.5" fill="#dce6fa">&#8805;1 MSPS, 12-bit</text>
+  <line x1="290" y1="169" x2="345" y2="169" stroke="#0b3d91" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Decision unit -->
+  <rect x="520" y="90" width="230" height="150" rx="8" fill="#f6e9e9" stroke="#7a1f1f" stroke-width="1.5"/>
+  <text x="535" y="110" font-size="12" font-weight="700" fill="#7a1f1f">DECISION UNIT (firmware)</text>
+  <rect x="540" y="130" width="190" height="90" rx="6" fill="#7a1f1f"/>
+  <text x="635" y="155" text-anchor="middle" font-size="13" fill="#fff" font-weight="600">Detection algorithm</text>
+  <text x="635" y="173" text-anchor="middle" font-size="10.5" fill="#f2d9d9">amplitude + slope +</text>
+  <text x="635" y="188" text-anchor="middle" font-size="10.5" fill="#f2d9d9">confirm window + hysteresis</text>
+  <text x="635" y="205" text-anchor="middle" font-size="10" fill="#f2d9d9" font-style="italic">MCU: STM32F4 / ESP32 / RP2040</text>
+  <line x1="485" y1="169" x2="540" y2="169" stroke="#7a1f1f" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Protection actuator -->
+  <rect x="800" y="105" width="170" height="70" rx="8" fill="#e8f3e8" stroke="#1f6e1f" stroke-width="1.5"/>
+  <text x="815" y="123" font-size="11.5" font-weight="700" fill="#1f6e1f">PROTECTION</text>
+  <rect x="815" y="132" width="140" height="35" rx="6" fill="#1f6e1f"/>
+  <text x="885" y="154" text-anchor="middle" font-size="12" fill="#fff" font-weight="600">Shield / disconnect</text>
+  <line x1="750" y1="150" x2="800" y2="140" stroke="#1f6e1f" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="770" y="135" font-size="9.5" fill="#1f6e1f" font-style="italic">EMP confirmed, &lt;10&#181;s target</text>
+
+  <!-- Reporting layer -->
+  <rect x="520" y="290" width="450" height="150" rx="8" fill="#eeeeee" stroke="#4a4a4a" stroke-width="1.5"/>
+  <text x="535" y="310" font-size="12" font-weight="700" fill="#4a4a4a">REPORTING LAYER</text>
+
+  <rect x="540" y="325" width="150" height="45" rx="6" fill="#4a4a4a"/>
+  <text x="615" y="344" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="600">Comms</text>
+  <text x="615" y="360" text-anchor="middle" font-size="10" fill="#ddd">UART / SPI / Ethernet</text>
+
+  <rect x="720" y="325" width="150" height="45" rx="6" fill="#4a4a4a"/>
+  <text x="795" y="344" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="600">Monitor app</text>
+  <text x="795" y="360" text-anchor="middle" font-size="10" fill="#ddd">software/monitor</text>
+
+  <rect x="630" y="390" width="150" height="45" rx="6" fill="#4a4a4a"/>
+  <text x="705" y="409" text-anchor="middle" font-size="12.5" fill="#fff" font-weight="600">REST API</text>
+  <text x="705" y="425" text-anchor="middle" font-size="10" fill="#ddd">software/api</text>
+
+  <line x1="690" y1="347" x2="720" y2="347" stroke="#4a4a4a" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="795" y1="370" x2="740" y2="390" stroke="#4a4a4a" stroke-width="2" marker-end="url(#arrow)"/>
+
+  <!-- Decision -> Comms -->
+  <line x1="635" y1="220" x2="635" y2="290" stroke="#7a1f1f" stroke-width="2" marker-end="url(#arrow)"/>
+  <line x1="615" y1="220" x2="615" y2="325" stroke="#7a1f1f" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+
+  <!-- Latency callout -->
+  <rect x="30" y="290" width="440" height="150" rx="8" fill="#fffaf0" stroke="#b58900" stroke-width="1.2" stroke-dasharray="5 4"/>
+  <text x="45" y="312" font-size="12" font-weight="700" fill="#7a5c00">LATENCY BUDGET (target: total &lt; 10 &#181;s)</text>
+  <text x="45" y="335" font-size="11" fill="#333">Signal propagation ................ 0.5 - 1.0 &#181;s</text>
+  <text x="45" y="355" font-size="11" fill="#333">ADC sampling ....................... 0.4 - 1.0 &#181;s</text>
+  <text x="45" y="375" font-size="11" fill="#333">Decision algorithm ................. 1.0 - 4.0 &#181;s</text>
+  <text x="45" y="395" font-size="11" fill="#333">Actuator switching .................. 1.0 - 5.0 &#181;s</text>
+  <text x="45" y="420" font-size="11" font-weight="700" fill="#7a5c00">Worst case: 11.0 &#181;s — see software/calculator/</text>
+
+  <text x="500" y="480" text-anchor="middle" font-size="10" fill="#888">Source: docs/architecture.md, docs/theory_of_operation.md — EMP-Guardian, Ciprian &#536;tefan Ple&#537;ca</text>
+  <text x="500" y="497" text-anchor="middle" font-size="10" fill="#888">Values are design-time estimates; validate per docs/test_procedures.md before relying on them.</text>
+</svg>

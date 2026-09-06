@@ -27,6 +27,8 @@ flowchart LR
     style Mon fill:#4a4a4a,color:#fff
 ```
 
+See also [`assets/system_block_diagram.svg`](../assets/system_block_diagram.svg) for a more detailed technical reference diagram, including the per-stage latency budget from the table below.
+
 ## Components
 
 - **EMP sensor:** Rogowski coil or broadband antenna, with a conditioning circuit (amplifier + voltage limiter, essential to protect the ADC input).

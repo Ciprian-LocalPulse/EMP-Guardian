@@ -313,6 +313,93 @@ def latency_budget(
 
 
 # --------------------------------------------------------------------- #
+# Fast-transient waveform model (double exponential, E1-style)          #
+# --------------------------------------------------------------------- #
+
+
+@dataclass
+class WaveformResult:
+    e0_v_per_m: float
+    alpha: float
+    beta: float
+    t_peak_s: float
+    rise_time_10_90_s: float
+
+    def summary(self) -> str:
+        return (
+            f"Double-exponential waveform (E0={self.e0_v_per_m:.4g} V/m, "
+            f"alpha={self.alpha:.3g}, beta={self.beta:.3g}): "
+            f"peak at {self.t_peak_s * 1e9:.3f} ns, "
+            f"10-90% rise time {self.rise_time_10_90_s * 1e9:.3f} ns"
+        )
+
+
+def e1_waveform_peak_time(alpha: float, beta: float) -> float:
+    """Exact time (s) at which E(t) = k*(exp(-alpha*t) - exp(-beta*t))
+    reaches its peak: t_peak = ln(beta/alpha) / (beta - alpha)."""
+    if beta <= alpha:
+        raise ValueError("beta must be greater than alpha (fast rise, slower decay)")
+    return math.log(beta / alpha) / (beta - alpha)
+
+
+def e1_waveform(t_s: float, e0_v_per_m: float = 50000.0,
+                alpha: float = 4.0e6, beta: float = 4.76e8) -> float:
+    """Double-exponential fast-transient waveform (V/m), of the general
+    form used to describe the E1 phase of a HEMP event in civilian/
+    military test standards (IEC 61000-2-9 style model):
+
+        E(t) = E0 * k * (exp(-alpha*t) - exp(-beta*t))
+
+    The normalization constant k is computed exactly so the waveform's
+    peak equals e0_v_per_m. Default alpha/beta are illustrative
+    order-of-magnitude values (rise ~ns, decay ~hundreds of ns) - for
+    compliance work, take alpha/beta directly from the standard's text,
+    not from these defaults.
+    """
+    if t_s < 0:
+        return 0.0
+    t_peak = e1_waveform_peak_time(alpha, beta)
+    raw_peak = math.exp(-alpha * t_peak) - math.exp(-beta * t_peak)
+    k = 1.0 / raw_peak
+    raw = math.exp(-alpha * t_s) - math.exp(-beta * t_s)
+    return e0_v_per_m * k * raw
+
+
+def e1_waveform_rise_time_10_90(alpha: float = 4.0e6, beta: float = 4.76e8,
+                                 e0_v_per_m: float = 50000.0,
+                                 samples: int = 200000, t_max_s: float = 1e-6) -> float:
+    """Numerically estimates the 10%-90% rise time (s) by dense sampling."""
+    dt = t_max_s / samples
+    threshold_10 = 0.10 * e0_v_per_m
+    threshold_90 = 0.90 * e0_v_per_m
+    t10 = None
+    t90 = None
+    for i in range(samples):
+        t = i * dt
+        v = e1_waveform(t, e0_v_per_m, alpha, beta)
+        if t10 is None and v >= threshold_10:
+            t10 = t
+        if t90 is None and v >= threshold_90:
+            t90 = t
+            break
+    if t10 is None or t90 is None:
+        raise RuntimeError("Rise time not found within t_max_s - increase t_max_s")
+    return t90 - t10
+
+
+def waveform_summary(e0_v_per_m: float = 50000.0, alpha: float = 4.0e6,
+                      beta: float = 4.76e8) -> WaveformResult:
+    """Convenience wrapper bundling peak time and rise time into one result."""
+    return WaveformResult(
+        e0_v_per_m=e0_v_per_m,
+        alpha=alpha,
+        beta=beta,
+        t_peak_s=e1_waveform_peak_time(alpha, beta),
+        rise_time_10_90_s=e1_waveform_rise_time_10_90(alpha, beta, e0_v_per_m),
+    )
+
+
+# --------------------------------------------------------------------- #
 # CLI                                                                    #
 # --------------------------------------------------------------------- #
 
@@ -366,6 +453,11 @@ def build_parser() -> argparse.ArgumentParser:
         )
     p_latency.add_argument("--target", type=float, default=DEFAULT_TARGET_US, help="Target total, us")
 
+    p_wave = subparsers.add_parser("waveform", help="Model the E1-style double-exponential waveform")
+    p_wave.add_argument("--e0", type=float, default=50000.0, help="Peak field amplitude, V/m (default: 50000)")
+    p_wave.add_argument("--alpha", type=float, default=4.0e6, help="Decay rate constant, 1/s (default: 4e6)")
+    p_wave.add_argument("--beta", type=float, default=4.76e8, help="Rise rate constant, 1/s (default: 4.76e8)")
+
     return parser
 
 
@@ -403,6 +495,10 @@ def main(argv=None) -> int:
                 value = getattr(args, stage)
                 kwargs[f"{stage}_us"] = tuple(value) if value is not None else default
             result = latency_budget(target_us=args.target, **kwargs)
+            print(result.summary())
+
+        elif args.command == "waveform":
+            result = waveform_summary(e0_v_per_m=args.e0, alpha=args.alpha, beta=args.beta)
             print(result.summary())
 
     except ValueError as exc:

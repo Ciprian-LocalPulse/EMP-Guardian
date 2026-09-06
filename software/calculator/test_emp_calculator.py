@@ -12,6 +12,10 @@ from emp_calculator import (
     shielding_effectiveness,
     rogowski_sensitivity,
     latency_budget,
+    e1_waveform,
+    e1_waveform_peak_time,
+    e1_waveform_rise_time_10_90,
+    waveform_summary,
     MATERIALS,
 )
 
@@ -107,6 +111,41 @@ class TestLatencyBudget(unittest.TestCase):
         )
         self.assertLessEqual(result.total_max_us, result.target_us)
         self.assertIn(" OK", result.summary())
+
+
+class TestWaveform(unittest.TestCase):
+    def test_peak_equals_e0_exactly(self):
+        # By construction (exact normalization constant), the waveform's
+        # peak must equal e0 at t = t_peak.
+        e0 = 50000.0
+        alpha, beta = 4.0e6, 4.76e8
+        t_peak = e1_waveform_peak_time(alpha, beta)
+        peak_value = e1_waveform(t_peak, e0, alpha, beta)
+        self.assertAlmostEqual(peak_value, e0, delta=1e-6 * e0)
+
+    def test_zero_at_t_zero(self):
+        v = e1_waveform(0.0, 50000.0, 4.0e6, 4.76e8)
+        self.assertAlmostEqual(v, 0.0, places=6)
+
+    def test_decays_to_near_zero_after_several_time_constants(self):
+        # Decay time constant is 1/alpha = 250 ns here, so by t=2us
+        # (8 time constants) the signal should be well under 1% of peak.
+        v_late = e1_waveform(2e-6, 50000.0, 4.0e6, 4.76e8)
+        self.assertLess(v_late, 50000.0 * 0.01)
+
+    def test_rise_time_is_nanosecond_scale(self):
+        rise_ns = e1_waveform_rise_time_10_90() * 1e9
+        self.assertTrue(0.1 < rise_ns < 100.0)
+
+    def test_rejects_beta_not_greater_than_alpha(self):
+        with self.assertRaises(ValueError):
+            e1_waveform_peak_time(alpha=1e8, beta=1e6)
+
+    def test_waveform_summary_bundles_peak_and_rise_time(self):
+        result = waveform_summary()
+        self.assertGreater(result.rise_time_10_90_s, 0.0)
+        self.assertGreater(result.t_peak_s, 0.0)
+        self.assertIn("ns", result.summary())
 
 
 if __name__ == "__main__":

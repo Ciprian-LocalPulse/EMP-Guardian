@@ -13,6 +13,7 @@ No dependencies beyond the Python 3 standard library.
 | `shielding` | Shielding effectiveness SE = A (absorption) + R (reflection), in dB |
 | `rogowski` | Rogowski coil mutual inductance and induced voltage for a given dI/dt |
 | `latency` | Sums the detection-to-activation latency budget and flags if it's over the 10 µs target |
+| `waveform` | Models the E1-style double-exponential fast-transient waveform (peak time, 10-90% rise time) |
 
 ## Quick start
 
@@ -33,6 +34,10 @@ python3 emp_calculator.py latency
 
 # ...or override with your own measured stage timings
 python3 emp_calculator.py latency --decision 0.5 1.5 --actuator 1 2
+
+# Model the E1-style double-exponential waveform
+python3 emp_calculator.py waveform
+python3 emp_calculator.py waveform --e0 60000 --alpha 3e6 --beta 3e8
 ```
 
 ## Use as a library
@@ -55,7 +60,7 @@ with `--sigma` / `--mu-r` (or the `sigma=` / `mu_r=` keyword arguments).
 python3 -m unittest test_emp_calculator.py -v
 ```
 
-16 tests, including a cross-check against the textbook reference value for
+22 tests, including a cross-check against the textbook reference value for
 copper's skin depth at 60 Hz (~8.5 mm).
 
 ## Honesty notes (read before using these numbers for real hardware)
@@ -74,5 +79,10 @@ copper's skin depth at 60 Hz (~8.5 mm).
   `docs/theory_of_operation.md`, explicitly *not* lab-measured values. Once
   you have real hardware, feed in your measured stage timings from
   `docs/test_procedures.md` instead of the defaults.
+- **The E1 waveform model**'s default `alpha`/`beta` are illustrative
+  order-of-magnitude values (nanosecond rise, hundreds-of-nanoseconds
+  decay), not asserted to be the exact IEC 61000-2-9 standardized test
+  waveform parameters. For compliance or certification work, take
+  `alpha`/`beta` directly from the standard's text, not from these defaults.
 - None of this replaces validation by an accredited lab for any
   institutional or safety-critical deployment — see `docs/compliance.md`.
